@@ -20,6 +20,15 @@ public class LoginView extends JFrame {
         int y = (Toolkit.getDefaultToolkit().getScreenSize().height - this.getSize().height) / 2;
         this.setLocation(x,y);
         this.setVisible(true);
+
+
+        btn_login.addActionListener(e -> {
+            if (fld_username.getText().isEmpty() || fld_password.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Not null", "Error", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                System.out.println("Logged!");
+            }
+        });
     }
 
 }
