@@ -1,2 +1,4 @@
-package view;public class AdminView {
+package view;
+
+public class AdminView {
 }
