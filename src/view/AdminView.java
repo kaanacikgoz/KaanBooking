@@ -7,6 +7,10 @@ import entity.User.Role;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 public class AdminView extends JFrame {
@@ -22,6 +26,7 @@ public class AdminView extends JFrame {
     private JScrollPane scrl_user;
     private JPanel user_container;
     private final UserManager userManager;
+    private JPopupMenu userMenu = new JPopupMenu();
 
     public AdminView() {
         this.userManager = new UserManager();
@@ -34,6 +39,7 @@ public class AdminView extends JFrame {
         this.setVisible(true);
         loadUserRoleFilter();
         makeTable();
+        loadUserComponent();
     }
 
     private void loadUserRoleFilter() {
@@ -63,6 +69,48 @@ public class AdminView extends JFrame {
         for (Object[] row:userRow) {
             model.addRow(row);
         }
+    }
+
+    private void loadUserComponent() {
+        tableRowSelect(this.tbl_user, this.userMenu);
+        this.userMenu.add("Yeni").addActionListener(e -> {
+            UserView userView = new UserView();
+            userView.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    makeTable();
+                }
+            });
+        });
+        this.userMenu.add("Güncelle").addActionListener(e -> {
+            UserView userView = new UserView();
+            userView.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    makeTable();
+                }
+            });
+        });
+        this.userMenu.add("Sil").addActionListener(e -> {
+            JOptionPane.showConfirmDialog(null, "Are you sure to delete?", "Warning!",JOptionPane.YES_NO_OPTION);
+        });
+    }
+
+    public void tableRowSelect(JTable table, JPopupMenu menu) {
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (SwingUtilities.isLeftMouseButton(e)) {
+                    int selectedRow = table.rowAtPoint(e.getPoint());
+                    table.setRowSelectionInterval(selectedRow, selectedRow);
+                }
+                if (SwingUtilities.isRightMouseButton(e)) {
+                    int row = table.rowAtPoint(e.getPoint());
+                    table.setRowSelectionInterval(row, row);
+                    menu.show(table, e.getX(), e.getY());
+                }
+            }
+        });
     }
 
 }
