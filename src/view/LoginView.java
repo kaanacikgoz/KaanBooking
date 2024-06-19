@@ -37,7 +37,8 @@ public class LoginView extends JFrame {
                         if (user.getRole()==User.Role.ADMIN) {
                             //Admin View
                             AdminView adminView = new AdminView();
-                            System.out.println("admin");
+                            adminView.lbl_welcome.setText("Welcome, "+this.fld_username.getText());
+                            this.dispose();
                         } else {
                             //Employee View
                             System.out.println("Employee");
