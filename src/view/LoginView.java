@@ -1,7 +1,11 @@
 package view;
 
+import business.UserManager;
+import entity.User;
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.Objects;
 
 public class LoginView extends JFrame {
     private JPanel container;
@@ -11,8 +15,10 @@ public class LoginView extends JFrame {
     private JLabel lbl_username;
     private JLabel lbl_password;
     private JLabel lbl_header;
+    private final UserManager userManager;
 
     public LoginView() {
+        this.userManager = new UserManager();
         this.add(container);
         this.setSize(300,300);
         this.setTitle("KaanBooking Inc.");
@@ -24,9 +30,22 @@ public class LoginView extends JFrame {
 
         btn_login.addActionListener(e -> {
             if (fld_username.getText().isEmpty() || fld_password.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Not null", "Error", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Please fill in both fields", "Error", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                System.out.println("Logged!");
+                for (User user:this.userManager.findAll()) {
+                    if (Objects.equals(fld_username.getText(), user.getUsername()) && Objects.equals(fld_password.getText(), user.getPassword())) {
+                        if (user.getRole()==User.Role.ADMIN) {
+                            //Admin View
+                            AdminView adminView = new AdminView();
+                            System.out.println("admin");
+                        } else {
+                            //Employee View
+                            System.out.println("Employee");
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "User not found", "Error",JOptionPane.ERROR_MESSAGE);
+                    }
+                }
             }
         });
     }
