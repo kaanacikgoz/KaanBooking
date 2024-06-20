@@ -31,4 +31,8 @@ public class UserManager {
         return userList;
     }
 
+    public boolean addUser(User user) {
+        return this.userDao.addUser(user);
+    }
+
 }

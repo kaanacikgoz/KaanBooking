@@ -1,5 +1,6 @@
 package view;
 
+import business.UserManager;
 import entity.User;
 
 import javax.swing.*;
@@ -15,8 +16,10 @@ public class UserView extends JFrame {
     private JLabel lbl_username;
     private JLabel lbl_password;
     private JLabel lbl_role;
+    private final UserManager userManager;
 
     public UserView() {
+        this.userManager = new UserManager();
         this.add(container);
         this.setSize(300,300);
         this.setTitle("Edit View");
@@ -25,6 +28,15 @@ public class UserView extends JFrame {
         this.setLocation(x,y);
         this.setVisible(true);
         setupComboBox();
+
+        btn_save.addActionListener(e -> {
+            if (userManager.addUser(addUser())) {
+                JOptionPane.showMessageDialog(null, "User added succesfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "User could not add", "Error!", JOptionPane.ERROR_MESSAGE);
+            }
+            dispose();
+        });
     }
 
     private void setupComboBox() {
@@ -33,6 +45,14 @@ public class UserView extends JFrame {
             this.cmb_role.addItem(role);
         }
         this.cmb_role.setSelectedItem(null);
+    }
+
+    private User addUser() {
+        User user = new User();
+        user.setUsername(this.fld_username.getText());
+        user.setPassword(this.fld_password.getText());
+        user.setRole((User.Role) this.cmb_role.getSelectedItem());
+        return user;
     }
 
 }

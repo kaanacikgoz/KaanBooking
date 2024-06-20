@@ -37,4 +37,21 @@ public class UserDao {
         return userList;
     }
 
+    public boolean addUser(User user) {
+        String query = "INSERT INTO public.user (user_username, user_password, user_role) " +
+                "VALUES ( " +
+                "?,?,?" +
+                " )";
+        try {
+            PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+            preparedStatement.setString(1, user.getUsername());
+            preparedStatement.setString(2, user.getPassword());
+            preparedStatement.setString(3, String.valueOf(user.getRole()));
+            return preparedStatement.executeUpdate() != -1;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return true;
+    }
+
 }

@@ -26,7 +26,7 @@ public class AdminView extends JFrame {
     private JScrollPane scrl_user;
     private JPanel user_container;
     private final UserManager userManager;
-    private JPopupMenu userMenu = new JPopupMenu();
+    private final JPopupMenu userMenu = new JPopupMenu();
 
     public AdminView() {
         this.userManager = new UserManager();
