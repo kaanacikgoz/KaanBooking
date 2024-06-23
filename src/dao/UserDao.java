@@ -54,4 +54,56 @@ public class UserDao {
         return true;
     }
 
+    public boolean updateUser(User user) {
+        String query = "UPDATE public.user " +
+                "SET user_username=?, user_password=?, user_role=? " +
+                "WHERE user_id=?";
+        try {
+            PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+            preparedStatement.setString(1,user.getUsername());
+            preparedStatement.setString(2, user.getPassword());
+            preparedStatement.setString(3, String.valueOf(user.getRole()));
+            preparedStatement.setInt(4, user.getId());
+            return preparedStatement.executeUpdate() != -1;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+       return true;
+    }
+
+    public boolean deleteUser(int user_id) {
+        String query = "DELETE FROM public.user " +
+                        "WHERE user_id=?";
+        try {
+            PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+            preparedStatement.setInt(1, user_id);
+            return preparedStatement.executeUpdate() != -1;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return true;
+    }
+
+    public User getById(int id) {
+        User user = null;
+        String query = "SELECT * FROM public.user " +
+                        "WHERE user_id=?";
+        try {
+            PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+            preparedStatement.setInt(1,id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                user = new User();
+                user.setId(resultSet.getInt("user_id"));
+                user.setUsername(resultSet.getString("user_username"));
+                user.setPassword(resultSet.getString("user_password"));
+                user.setRole(User.Role.valueOf(resultSet.getString("user_role").toUpperCase()));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return user;
+    }
+
+
 }

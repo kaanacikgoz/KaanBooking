@@ -35,4 +35,16 @@ public class UserManager {
         return this.userDao.addUser(user);
     }
 
+    public boolean updateUser(User user) {
+        return this.userDao.updateUser(user);
+    }
+
+    public boolean deleteUser(int user_id) {
+        return this.userDao.deleteUser(user_id);
+    }
+
+    public User getById(int id) {
+        return this.userDao.getById(id);
+    }
+
 }

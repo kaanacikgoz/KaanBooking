@@ -17,8 +17,10 @@ public class UserView extends JFrame {
     private JLabel lbl_password;
     private JLabel lbl_role;
     private final UserManager userManager;
+    private final User user;
 
-    public UserView() {
+    public UserView(User user) {
+        this.user = user;
         this.userManager = new UserManager();
         this.add(container);
         this.setSize(300,300);
@@ -28,12 +30,13 @@ public class UserView extends JFrame {
         this.setLocation(x,y);
         this.setVisible(true);
         setupComboBox();
-
+        setUserInfo();
         btn_save.addActionListener(e -> {
-            if (userManager.addUser(addUser())) {
-                JOptionPane.showMessageDialog(null, "User added succesfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+            if (this.user.getId() != 0) {
+                this.userManager.updateUser(addUser());
             } else {
-                JOptionPane.showMessageDialog(null, "User could not add", "Error!", JOptionPane.ERROR_MESSAGE);
+                this.userManager.addUser(addUser());
+                JOptionPane.showMessageDialog(null, "User added succesfully", "Success", JOptionPane.INFORMATION_MESSAGE);
             }
             dispose();
         });
@@ -48,11 +51,16 @@ public class UserView extends JFrame {
     }
 
     private User addUser() {
-        User user = new User();
         user.setUsername(this.fld_username.getText());
         user.setPassword(this.fld_password.getText());
         user.setRole((User.Role) this.cmb_role.getSelectedItem());
         return user;
+    }
+
+    private void setUserInfo() {
+        this.fld_username.setText(user.getUsername());
+        this.fld_password.setText(user.getPassword());
+        this.cmb_role.setSelectedItem(user.getRole());
     }
 
 }
