@@ -38,10 +38,12 @@ public class LoginView extends JFrame {
                             //Admin View
                             AdminView adminView = new AdminView();
                             adminView.lbl_welcome.setText("Welcome, "+this.fld_username.getText());
-                            this.dispose();
+                            dispose();
                         } else {
                             //Employee View
+                            EmployeeView employeeView = new EmployeeView();
                             System.out.println("Employee");
+                            dispose();
                         }
                     } else {
                         JOptionPane.showMessageDialog(null, "User not found", "Error",JOptionPane.ERROR_MESSAGE);
