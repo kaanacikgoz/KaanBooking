@@ -27,7 +27,6 @@ public class LoginView extends JFrame {
         this.setLocation(x,y);
         this.setVisible(true);
 
-
         btn_login.addActionListener(e -> {
             if (fld_username.getText().isEmpty() || fld_password.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Please fill in both fields", "Error", JOptionPane.INFORMATION_MESSAGE);
