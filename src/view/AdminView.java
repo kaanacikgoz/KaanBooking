@@ -1,16 +1,14 @@
 package view;
 
 import business.UserManager;
+import core.ComboItem;
 import entity.User;
 import entity.User.Role;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.util.ArrayList;
 
 public class AdminView extends JFrame {
@@ -21,12 +19,13 @@ public class AdminView extends JFrame {
     private JPanel top_container;
     private JTable tbl_user;
     private JButton btn_search;
-    private JComboBox<User.Role> cmb_user_role;
+    private JComboBox<ComboItem> cmb_user_role;
     private JButton btn_clear;
     private JScrollPane scrl_user;
     private JPanel user_container;
     private final UserManager userManager;
     private final JPopupMenu userMenu = new JPopupMenu();
+    private String[] columnNames;
 
     public AdminView() {
         this.userManager = new UserManager();
@@ -40,18 +39,19 @@ public class AdminView extends JFrame {
         loadUserRoleFilter();
         makeTable();
         loadUserComponent();
+
     }
 
     private void loadUserRoleFilter() {
         this.cmb_user_role.removeAllItems();
-        for (Role role:User.Role.values()) {
-            cmb_user_role.addItem(role);
+        for (Role role : Role.values()) {
+            cmb_user_role.addItem(new ComboItem(role.ordinal(), role.toString()));
         }
         this.cmb_user_role.setSelectedItem(null);
     }
 
     private void makeTable() {
-        String[] columnNames = {"ID", "Username", "Password", "Role"};
+        columnNames = new String[]{"ID", "Username", "Password", "Role"};
         DefaultTableModel model = new DefaultTableModel();
         model.setColumnIdentifiers(columnNames);
         tbl_user.setModel(model);
@@ -103,6 +103,22 @@ public class AdminView extends JFrame {
                 JOptionPane.showMessageDialog(null, "User could not deleted", "Not Deleted", JOptionPane.INFORMATION_MESSAGE);
             }
         });
+        btn_search.addActionListener(e -> {
+            ComboItem selectedRoleItem = (ComboItem) this.cmb_user_role.getSelectedItem();
+            ArrayList<User> userListBySearch;
+            if (selectedRoleItem != null) {
+                Role selectedRole = Role.values()[selectedRoleItem.getKey()];
+                userListBySearch = this.userManager.searchForTable(0, selectedRole);
+            } else {
+                userListBySearch = this.userManager.findAll();
+            }
+            ArrayList<Object[]> userRowListBySearch = this.userManager.getForTable(this.columnNames.length, userListBySearch);
+            loadModelTable(userRowListBySearch);
+        });
+        btn_clear.addActionListener(e -> {
+            this.cmb_user_role.setSelectedItem(null);
+            loadModelTable(null);
+        });
     }
 
     private int getTableSelectedRow(JTable table, int index) {
@@ -127,11 +143,15 @@ public class AdminView extends JFrame {
     }
 
     public void loadModelTable(ArrayList<Object[]> userList) {
-        String[] columnNames = {"ID", "Username", "Password", "Role"};
-        if (userList==null) {
+        DefaultTableModel model = (DefaultTableModel) tbl_user.getModel();
+        model.setRowCount(0); // Clear the table
+
+        if (userList == null) {
             userList = this.userManager.getForTable(columnNames.length, this.userManager.findAll());
         }
-        makeTable();
+        for (Object[] row : userList) {
+            model.addRow(row);
+        }
     }
 
 }

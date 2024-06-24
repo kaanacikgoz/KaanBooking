@@ -47,4 +47,27 @@ public class UserManager {
         return this.userDao.getById(id);
     }
 
+    public ArrayList<User> searchForTable(int userId, User.Role role) {
+        StringBuilder query = new StringBuilder("SELECT * FROM public.user");
+        ArrayList<Object> parameters = new ArrayList<>();
+        boolean hasConditions = false;
+
+        if (userId != 0) {
+            query.append(" WHERE user_id=?");
+            parameters.add(userId);
+            hasConditions = true;
+        }
+
+        if (role != null) {
+            if (hasConditions) {
+                query.append(" AND user_role=?");
+            } else {
+                query.append(" WHERE user_role=?");
+            }
+            parameters.add(role.toString());
+        }
+
+        return this.userDao.selectByQuery(query.toString(), parameters);
+    }
+
 }

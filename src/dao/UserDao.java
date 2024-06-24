@@ -105,5 +105,26 @@ public class UserDao {
         return user;
     }
 
+    public ArrayList<User> selectByQuery(String query, ArrayList<Object> parameters) {
+        ArrayList<User> userList = new ArrayList<>();
+        try (PreparedStatement preparedStatement = this.connection.prepareStatement(query)) {
+            for (int i = 0; i < parameters.size(); i++) {
+                preparedStatement.setObject(i + 1, parameters.get(i));
+            }
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    User user = new User();
+                    user.setId(resultSet.getInt("user_id"));
+                    user.setUsername(resultSet.getString("user_username"));
+                    user.setPassword(resultSet.getString("user_password"));
+                    user.setRole(User.Role.valueOf(resultSet.getString("user_role").toUpperCase()));
+                    userList.add(user);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return userList;
+    }
 
 }
