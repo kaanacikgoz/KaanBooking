@@ -73,7 +73,7 @@ public class AdminView extends JFrame {
 
     private void loadUserComponent() {
         tableRowSelect(this.tbl_user, this.userMenu);
-        this.userMenu.add("Yeni").addActionListener(e -> {
+        this.userMenu.add("New").addActionListener(e -> {
             UserView userView = new UserView(new User());
             userView.addWindowListener(new WindowAdapter() {
                 @Override
@@ -82,7 +82,7 @@ public class AdminView extends JFrame {
                 }
             });
         });
-        this.userMenu.add("Güncelle").addActionListener(e -> {
+        this.userMenu.add("Update").addActionListener(e -> {
             int selectModelId = this.getTableSelectedRow(this.tbl_user, 0);
             UserView userView = new UserView(this.userManager.getById(selectModelId));
             userView.addWindowListener(new WindowAdapter() {
@@ -92,7 +92,7 @@ public class AdminView extends JFrame {
                 }
             });
         });
-        this.userMenu.add("Sil").addActionListener(e -> {
+        this.userMenu.add("Delete").addActionListener(e -> {
             int response = JOptionPane.showConfirmDialog(null, "Are you sure to delete?", "Warning!",JOptionPane.YES_NO_OPTION);
             int selectModelId = this.getTableSelectedRow(this.tbl_user, 0);
             if (response==JOptionPane.YES_OPTION) {

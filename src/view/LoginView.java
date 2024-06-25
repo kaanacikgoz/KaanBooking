@@ -36,11 +36,14 @@ public class LoginView extends JFrame {
                         if (user.getRole()==User.Role.ADMIN) {
                             //Admin View
                             AdminView adminView = new AdminView();
-                            adminView.lbl_welcome.setText("Welcome, "+this.fld_username.getText());
+                            setWelcomeText(adminView, null);
+                            //adminView.lbl_welcome.setText("Welcome, "+this.fld_username.getText());
                             dispose();
                         } else {
                             //Employee View
                             EmployeeView employeeView = new EmployeeView();
+                            setWelcomeText(null, employeeView);
+                            //employeeView.lbl_welcome.setText("Welcome, "+this.fld_username.getText());
                             System.out.println("Employee");
                             dispose();
                         }
@@ -50,6 +53,14 @@ public class LoginView extends JFrame {
                 }
             }
         });
+    }
+
+    private void setWelcomeText(AdminView adminView, EmployeeView employeeView) {
+        if (adminView==null) {
+            employeeView.lbl_welcome.setText("Welcome, "+this.fld_username.getText());
+        } else {
+            adminView.lbl_welcome.setText("Welcome, "+this.fld_username.getText());
+        }
     }
 
 }

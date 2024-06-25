@@ -43,4 +43,20 @@ public class HotelManager {
         return hotelList;
     }
 
+    public Hotel getById(int id) {
+        return this.hotelDao.getById(id);
+    }
+
+    public boolean addHotel(Hotel hotel) {
+        return this.hotelDao.addHotel(hotel);
+    }
+
+    public boolean updateHotel(Hotel hotel) {
+        return this.hotelDao.updateHotel(hotel);
+    }
+
+    public boolean deleteHotel(int hotel_id) {
+        return this.hotelDao.deleteHotel(hotel_id);
+    }
+
 }
