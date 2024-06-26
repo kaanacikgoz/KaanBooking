@@ -10,7 +10,6 @@ public class Hotel {
     private String email;
     private String phone;
     private Star star;
-    private HotelType hotelType;
     private boolean freeParking;
     private boolean freeWifi;
     private boolean swimmingPool;
@@ -25,16 +24,6 @@ public class Hotel {
         THREE,
         FOUR,
         FIVE
-    }
-
-    public enum HotelType {
-        ULTRA_ALL_INCLUSIVE,
-        ALL_INCLUSIVE,
-        BED_AND_BREAKFAST,
-        FULL_BOARD,
-        HALF_BOARD,
-        JUST_THE_BED,
-        FULL_CREDIT_EXCEPT_ALCOHOL
     }
 
     public Hotel() {
@@ -103,14 +92,6 @@ public class Hotel {
 
     public void setStar(Star star) {
         this.star = star;
-    }
-
-    public HotelType getHotelType() {
-        return hotelType;
-    }
-
-    public void setHotelType(HotelType hotelType) {
-        this.hotelType = hotelType;
     }
 
     public boolean isFreeParking() {

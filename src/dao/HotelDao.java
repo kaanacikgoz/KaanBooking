@@ -2,7 +2,6 @@ package dao;
 
 import core.Database;
 import entity.Hotel;
-import entity.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -139,12 +138,12 @@ public class HotelDao {
         return true;
     }
 
-    public boolean deleteHotel(int user_id) {
+    public boolean deleteHotel(int hotel_id) {
         String query = "DELETE FROM public.hotel " +
                         "WHERE hotel_id=?";
         try {
             PreparedStatement preparedStatement = this.connection.prepareStatement(query);
-            preparedStatement.setInt(1, user_id);
+            preparedStatement.setInt(1, hotel_id);
             return preparedStatement.executeUpdate() != -1;
         } catch (SQLException e) {
             System.out.println(e.getMessage());

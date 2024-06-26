@@ -1,7 +1,9 @@
 package view;
 
 import business.HotelManager;
+import business.PensionManager;
 import entity.Hotel;
+import entity.Pension;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -18,16 +20,22 @@ public class EmployeeView extends JFrame {
     private JPanel pnl_top;
     private JButton btn_logout;
     private JTabbedPane tabbedPane1;
-    private JTable tbl_otel;
-    private JScrollPane scrl_otel;
-    private JPanel pnl_otel;
+    private JTable tbl_hotel;
+    private JScrollPane scrl_hotel;
+    private JPanel pnl_hotel;
     public JLabel lbl_welcome;
-    private String[] columnNames;
+    private JTabbedPane tabbedPane2;
+    private JTable tbl_pension;
+    private String[] hotelColumnNames;
+    private String[] pensionColumnNames;
     private final HotelManager hotelManager;
+    private final PensionManager pensionManager;
     private final JPopupMenu hotelMenu = new JPopupMenu();
+    private final JPopupMenu pensionMenu = new JPopupMenu();
 
     public EmployeeView() {
         this.hotelManager = new HotelManager();
+        this.pensionManager = new PensionManager();
         this.add(container);
         this.setSize(1250,500);
         this.setTitle("Employee View");
@@ -35,28 +43,50 @@ public class EmployeeView extends JFrame {
         int y = (Toolkit.getDefaultToolkit().getScreenSize().height - this.getSize().height) / 2;
         this.setLocation(x,y);
         this.setVisible(true);
-        makeTable();
+        makeHotelTable();
+        makePensionTable();
         loadHotelComponent();
+        loadPensionComponent();
     }
 
-    private void makeTable() {
-        columnNames = new String[]{"ID","Hotel Name","City","Region","Address","Email","Phone","Star",
+    private void makeHotelTable() {
+        hotelColumnNames = new String[]{"ID","Hotel Name","City","Region","Address","Email","Phone","Star",
                 "FreeParking","FreeWifi","SwimmingPool","Gym","Concierge","Spa","24/7 RoomService"};
         DefaultTableModel model = new DefaultTableModel();
-        model.setColumnIdentifiers(columnNames);
-        tbl_otel.setModel(model);
-        tbl_otel.getTableHeader().setReorderingAllowed(false);
-        setTableWidth(this.tbl_otel);
-        tbl_otel.setEnabled(false);
+        model.setColumnIdentifiers(hotelColumnNames);
+        tbl_hotel.setModel(model);
+        tbl_hotel.getTableHeader().setReorderingAllowed(false);
+        setTableWidth(this.tbl_hotel);
+        tbl_hotel.setEnabled(false);
 
-        DefaultTableModel clearModel = (DefaultTableModel) tbl_otel.getModel();
+        DefaultTableModel clearModel = (DefaultTableModel) tbl_hotel.getModel();
         clearModel.setRowCount(0);
 
-        ArrayList<Object[]> userRow = this.hotelManager.getForTable(columnNames.length, this.hotelManager.findAll());
-        if (userRow==null) {
-            userRow = new ArrayList<>();
+        ArrayList<Object[]> hotelRow = this.hotelManager.getForTable(hotelColumnNames.length, this.hotelManager.findAll());
+        if (hotelRow==null) {
+            hotelRow = new ArrayList<>();
         }
-        for (Object[] row:userRow) {
+        for (Object[] row:hotelRow) {
+            model.addRow(row);
+        }
+    }
+
+    private void makePensionTable() {
+        pensionColumnNames = new String[]{"ID","Hotel ID","Hotel Name","Pension Type"};
+        DefaultTableModel model = new DefaultTableModel();
+        model.setColumnIdentifiers(pensionColumnNames);
+        tbl_pension.setModel(model);
+        tbl_pension.getTableHeader().setReorderingAllowed(false);
+        tbl_pension.setEnabled(false);
+
+        DefaultTableModel clearModel = (DefaultTableModel) tbl_pension.getModel();
+        clearModel.setRowCount(0);
+
+        ArrayList<Object[]> pensionRow = this.pensionManager.getForTable(pensionColumnNames.length, this.pensionManager.findAll());
+        if (pensionRow==null) {
+            pensionRow = new ArrayList<>();
+        }
+        for (Object[] row:pensionRow) {
             model.addRow(row);
         }
     }
@@ -80,35 +110,69 @@ public class EmployeeView extends JFrame {
     }
 
     private void loadHotelComponent() {
-        tableRowSelect(this.tbl_otel, this.hotelMenu);
+        tableRowSelect(this.tbl_hotel, this.hotelMenu);
         this.hotelMenu.add("New").addActionListener(e -> {
             HotelView hotelView = new HotelView(new Hotel());
             hotelView.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosed(WindowEvent e) {
-                    makeTable();
+                    makeHotelTable();
                 }
             });
         });
         this.hotelMenu.add("Update").addActionListener(e -> {
-            int selectModelId = this.getTableSelectedRow(this.tbl_otel, 0);
+            int selectModelId = this.getTableSelectedRow(this.tbl_hotel, 0);
             HotelView hotelView = new HotelView(this.hotelManager.getById(selectModelId));
             hotelView.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosed(WindowEvent e) {
-                    makeTable();
+                    makeHotelTable();
                 }
             });
         });
         this.hotelMenu.add("Delete").addActionListener(e -> {
             int response = JOptionPane.showConfirmDialog(null, "Are you sure to delete?", "Warning!",JOptionPane.YES_NO_OPTION);
-            int selectModelId = this.getTableSelectedRow(this.tbl_otel, 0);
+            int selectModelId = this.getTableSelectedRow(this.tbl_hotel, 0);
             if (response==JOptionPane.YES_OPTION) {
                 this.hotelManager.deleteHotel(selectModelId);
                 JOptionPane.showMessageDialog(null, "Hotel delete successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
-                loadModelTable(null);
+                loadHotelModelTable(null);
             } else {
                 JOptionPane.showMessageDialog(null, "Hotel could not deleted", "Not Deleted", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+    }
+
+    private void loadPensionComponent() {
+        tableRowSelect(this.tbl_pension, this.pensionMenu);
+        this.pensionMenu.add("New").addActionListener(e -> {
+            PensionView pensionView = new PensionView(new Pension());
+            pensionView.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    makePensionTable();
+                }
+            });
+        });
+        this.pensionMenu.add("Update").addActionListener(e -> {
+            int selectModelId = this.getTableSelectedRow(this.tbl_pension, 0);
+            PensionView pensionView = new PensionView(this.pensionManager.getById(selectModelId));
+            pensionView.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    makePensionTable();
+                }
+            });
+        });
+        this.pensionMenu.add("Delete").addActionListener(e -> {
+            int response = JOptionPane.showConfirmDialog(null, "Are you sure to delete?", "Warning!",JOptionPane.YES_NO_OPTION);
+            int selectModelId = this.getTableSelectedRow(this.tbl_pension, 0);
+            if (response==JOptionPane.YES_OPTION) {
+                this.pensionManager.deleteHotel(selectModelId);
+                JOptionPane.showMessageDialog(null, "Pension delete successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+                loadPensionModelTable(null);
+            } else {
+                JOptionPane.showMessageDialog(null, "Pension could not deleted", "Not Deleted", JOptionPane.INFORMATION_MESSAGE);
             }
         });
     }
@@ -134,14 +198,26 @@ public class EmployeeView extends JFrame {
         return Integer.parseInt(table.getValueAt(table.getSelectedRow(),index).toString());
     }
 
-    public void loadModelTable(ArrayList<Object[]> hotelList) {
-        DefaultTableModel model = (DefaultTableModel) tbl_otel.getModel();
+    public void loadHotelModelTable(ArrayList<Object[]> hotelList) {
+        DefaultTableModel model = (DefaultTableModel) tbl_hotel.getModel();
         model.setRowCount(0); // Clear the table
 
         if (hotelList == null) {
-            hotelList = this.hotelManager.getForTable(this.columnNames.length, this.hotelManager.findAll());
+            hotelList = this.hotelManager.getForTable(this.hotelColumnNames.length, this.hotelManager.findAll());
         }
         for (Object[] row : hotelList) {
+            model.addRow(row);
+        }
+    }
+
+    public void loadPensionModelTable(ArrayList<Object[]> pensionList) {
+        DefaultTableModel model = (DefaultTableModel) tbl_pension.getModel();
+        model.setRowCount(0); // Clear the table
+
+        if (pensionList == null) {
+            pensionList = this.pensionManager.getForTable(this.pensionColumnNames.length, this.pensionManager.findAll());
+        }
+        for (Object[] row : pensionList) {
             model.addRow(row);
         }
     }
