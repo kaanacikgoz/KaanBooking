@@ -20,7 +20,8 @@ public class PensionDao {
 
     public ArrayList<Pension> findAll() {
         ArrayList<Pension> pensionList = new ArrayList<>();
-        String query = "SELECT * FROM public.pension";
+        String query = "SELECT * FROM public.pension " +
+                "ORDER BY pension_id ASC";
         try {
             PreparedStatement preparedStatement = this.connection.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -69,6 +70,23 @@ public class PensionDao {
             preparedStatement.setInt(1,pension.getHotelId());
             preparedStatement.setString(2,pension.getPensionType().toString());
             preparedStatement.setString(3,pension.getHotelName());
+            return preparedStatement.executeUpdate() != -1;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return true;
+    }
+
+    public boolean updatePension(Pension pension) {
+        String query = "UPDATE public.pension " +
+                "SET hotel_id=?, pension_name=?, hotel_name=? " +
+                "WHERE pension_id=?";
+        try {
+            PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+            preparedStatement.setInt(1,pension.getHotelId());
+            preparedStatement.setString(2,pension.getPensionType().toString());
+            preparedStatement.setString(3,pension.getHotelName());
+            preparedStatement.setInt(4,pension.getPensionId());
             return preparedStatement.executeUpdate() != -1;
         } catch (SQLException e) {
             System.out.println(e.getMessage());

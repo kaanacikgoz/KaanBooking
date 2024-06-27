@@ -40,9 +40,12 @@ public class PensionManager {
     public boolean addPension(Pension pension) {
         return this.pensionDao.addPension(pension);
     }
+    public boolean updatePension(Pension pension) {
+        return this.pensionDao.updatePension(pension);
+    }
 
-    public boolean deletePension(int hotel_id) {
-        return this.pensionDao.deletePension(hotel_id);
+    public boolean deletePension(int pension_id) {
+        return this.pensionDao.deletePension(pension_id);
     }
 
 }

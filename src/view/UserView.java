@@ -29,8 +29,13 @@ public class UserView extends JFrame {
         int y = (Toolkit.getDefaultToolkit().getScreenSize().height - this.getSize().height) / 2;
         this.setLocation(x,y);
         this.setVisible(true);
+
         setupComboBox();
         setUserInfo();
+        saveButton();
+    }
+
+    private void saveButton() {
         btn_save.addActionListener(e -> {
             if (this.user.getId() != 0) {
                 this.userManager.updateUser(addUser());
