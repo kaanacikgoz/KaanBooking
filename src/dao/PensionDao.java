@@ -59,7 +59,24 @@ public class PensionDao {
         return pension;
     }
 
-    public boolean deleteHotel(int pension_id) {
+    public boolean addPension(Pension pension) {
+        String query = "INSERT INTO public.pension (hotel_id, pension_name, hotel_name ) " +
+                "VALUES ( " +
+                "?,?,?" +
+                " )";
+        try {
+            PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+            preparedStatement.setInt(1,pension.getHotelId());
+            preparedStatement.setString(2,pension.getPensionType().toString());
+            preparedStatement.setString(3,pension.getHotelName());
+            return preparedStatement.executeUpdate() != -1;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return true;
+    }
+
+    public boolean deletePension(int pension_id) {
         String query = "DELETE FROM public.pension " +
                 "WHERE pension_id=?";
         try {

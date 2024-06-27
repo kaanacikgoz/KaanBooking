@@ -33,24 +33,23 @@ public class PensionView extends JFrame {
         int y = (Toolkit.getDefaultToolkit().getScreenSize().height - this.getSize().height) / 2;
         this.setLocation(x,y);
         this.setVisible(true);
-        loadHotelCmb();
-        loadPensionCmb();
-        updateCmb();
-        /*
+        //loadHotelCmb();
+        //loadPensionCmb();
+        updateHotelCmb();
+
         btn_save.addActionListener(e -> {
             if (this.pension.getPensionId() != 0) {
-                this.pensionManager.updateHotel(addPension());
+                //this.pensionManager.updateHotel(addPension());
             } else {
-                this.pensionManager.addHotel(addPension());
+                this.pensionManager.addPension(addPension());
                 JOptionPane.showMessageDialog(null, "Pension added succesfully", "Success", JOptionPane.INFORMATION_MESSAGE);
             }
             dispose();
         });
 
-         */
     }
 
-    private void loadHotelCmb() {
+    private void addHotelCmb() {
         this.cmb_hotel.removeAllItems();
         for (Hotel hotel: hotelManager.findAll() ) {
             cmb_hotel.addItem(new ComboItem(hotel.getId(), hotel.getName()));
@@ -58,7 +57,7 @@ public class PensionView extends JFrame {
         this.cmb_hotel.setSelectedItem(null);
     }
 
-    private void loadPensionCmb() {
+    private void addPensionCmb() {
         this.cmb_pension.removeAllItems();
         for (Pension.PensionType pensionType: Pension.PensionType.values() ) {
             cmb_pension.addItem(new ComboItem(pensionType.ordinal(), pensionType.name()));
@@ -66,32 +65,38 @@ public class PensionView extends JFrame {
         this.cmb_pension.setSelectedItem(null);
     }
 
-    private void updateCmb() {
-        cmb_hotel.setSelectedItem(this.pension.getHotelName());
-        cmb_pension.setSelectedItem(this.pension.getPensionType());
+    private void updateHotelCmb() {
+        cmb_hotel.removeAllItems();
+        cmb_pension.removeAllItems();
+
+        for (Hotel hotel : hotelManager.findAll()) {
+            cmb_hotel.addItem(new ComboItem(hotel.getId(), hotel.getName()));
+        }
+
+        for (Pension.PensionType pension: Pension.PensionType.values()) {
+            cmb_pension.addItem(new ComboItem(pension.ordinal(), pension.name()));
+        }
+
+        cmb_hotel.setSelectedItem(pension.getHotelName());
+        cmb_pension.setSelectedItem(pension.getPensionType());
     }
 
-    /*
+
     private Pension addPension() {
-        pension.setPensionType((Pension.PensionType) this.cmb_pension.getSelectedItem());
-        hotel.setName(this.fld_name.getText());
-        hotel.setCity(this.fld_city.getText());
-        hotel.setRegion(this.fld_region.getText());
-        hotel.setAddress(this.fld_address.getText());
-        hotel.setEmail(this.fld_email.getText());
-        hotel.setPhone(this.fld_phone.getText());
-        hotel.setStar((Hotel.Star) this.cmb_star.getSelectedItem());
-        hotel.setFreeParking(this.chck_parking.isSelected());
-        hotel.setFreeWifi(this.chck_wifi.isSelected());
-        hotel.setSwimmingPool(this.chck_swimming.isSelected());
-        hotel.setGym(this.chck_gym.isSelected());
-        hotel.setHotelConcierge(this.chck_concierge.isSelected());
-        hotel.setSpa(this.chck_spa.isSelected());
-        hotel.setRoomService(this.chck_roomService.isSelected());
+        ComboItem selectedHotel = (ComboItem) cmb_hotel.getSelectedItem();
+        ComboItem selectedPensionType = (ComboItem) cmb_pension.getSelectedItem();
+
+        if (selectedHotel != null) {
+            pension.setHotelId(selectedHotel.getKey());
+            pension.setHotelName(selectedHotel.getValue());
+        }
+
+        if (selectedPensionType != null) {
+            pension.setPensionType(Pension.PensionType.values()[selectedPensionType.getKey()]);
+        }
+
         return pension;
     }
-
-     */
 
     /*
     private void setHotelNameInfo() {

@@ -168,7 +168,7 @@ public class EmployeeView extends JFrame {
             int response = JOptionPane.showConfirmDialog(null, "Are you sure to delete?", "Warning!",JOptionPane.YES_NO_OPTION);
             int selectModelId = this.getTableSelectedRow(this.tbl_pension, 0);
             if (response==JOptionPane.YES_OPTION) {
-                this.pensionManager.deleteHotel(selectModelId);
+                this.pensionManager.deletePension(selectModelId);
                 JOptionPane.showMessageDialog(null, "Pension delete successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
                 loadPensionModelTable(null);
             } else {

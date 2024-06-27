@@ -37,8 +37,12 @@ public class PensionManager {
         return this.pensionDao.getById(id);
     }
 
-    public boolean deleteHotel(int hotel_id) {
-        return this.pensionDao.deleteHotel(hotel_id);
+    public boolean addPension(Pension pension) {
+        return this.pensionDao.addPension(pension);
+    }
+
+    public boolean deletePension(int hotel_id) {
+        return this.pensionDao.deletePension(hotel_id);
     }
 
 }
