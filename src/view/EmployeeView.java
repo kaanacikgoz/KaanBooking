@@ -2,6 +2,7 @@ package view;
 
 import business.HotelManager;
 import business.PensionManager;
+import business.SeasonManager;
 import entity.Hotel;
 import entity.Pension;
 
@@ -26,16 +27,22 @@ public class EmployeeView extends JFrame {
     public JLabel lbl_welcome;
     private JTabbedPane tabbedPane2;
     private JTable tbl_pension;
+    private JTabbedPane tabbedPane3;
+    private JTable tbl_season;
     private String[] hotelColumnNames;
     private String[] pensionColumnNames;
+    private String[] seasonColumnNames;
     private final HotelManager hotelManager;
     private final PensionManager pensionManager;
+    private final SeasonManager seasonManager;
     private final JPopupMenu hotelMenu = new JPopupMenu();
     private final JPopupMenu pensionMenu = new JPopupMenu();
+    private final JPopupMenu seasonMenu = new JPopupMenu();
 
     public EmployeeView() {
         this.hotelManager = new HotelManager();
         this.pensionManager = new PensionManager();
+        this.seasonManager = new SeasonManager();
         this.add(container);
         this.setSize(1250,500);
         this.setTitle("Employee View");
@@ -45,8 +52,10 @@ public class EmployeeView extends JFrame {
         this.setVisible(true);
         makeHotelTable();
         makePensionTable();
+        makeSeasonTable();
         loadHotelComponent();
         loadPensionComponent();
+        loadSeasonComponent();
     }
 
     private void makeHotelTable() {
@@ -91,10 +100,30 @@ public class EmployeeView extends JFrame {
         }
     }
 
+    private void makeSeasonTable() {
+        seasonColumnNames = new String[]{"ID","Hotel ID","Hotel Name","Start Date","Finish Date"};
+        DefaultTableModel model = new DefaultTableModel();
+        model.setColumnIdentifiers(seasonColumnNames);
+        tbl_season.setModel(model);
+        tbl_season.getTableHeader().setReorderingAllowed(false);
+        tbl_season.setEnabled(false);
+
+        DefaultTableModel clearModel = (DefaultTableModel) tbl_season.getModel();
+        clearModel.setRowCount(0);
+
+        ArrayList<Object[]> seasonRow = this.seasonManager.getForTable(seasonColumnNames.length, this.seasonManager.findAll());
+        if (seasonRow==null) {
+            seasonRow = new ArrayList<>();
+        }
+        for (Object[] row:seasonRow) {
+            model.addRow(row);
+        }
+    }
+
     private void setTableWidth(JTable table) {
-        table.getColumnModel().getColumn(0).setMaxWidth(35);
+        table.getColumnModel().getColumn(0).setMaxWidth(25);
         table.getColumnModel().getColumn(1).setMaxWidth(125);
-        table.getColumnModel().getColumn(2).setMaxWidth(75);
+        table.getColumnModel().getColumn(2).setMaxWidth(50);
         table.getColumnModel().getColumn(3).setMaxWidth(75);
         table.getColumnModel().getColumn(4).setMaxWidth(200);
         table.getColumnModel().getColumn(5).setMaxWidth(125);
@@ -144,6 +173,40 @@ public class EmployeeView extends JFrame {
     }
 
     private void loadPensionComponent() {
+        tableRowSelect(this.tbl_season, this.seasonMenu);
+        this.seasonMenu.add("New").addActionListener(e -> {
+            PensionView pensionView = new PensionView(new Pension());
+            pensionView.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    makePensionTable();
+                }
+            });
+        });
+        this.seasonMenu.add("Update").addActionListener(e -> {
+            int selectModelId = this.getTableSelectedRow(this.tbl_pension, 0);
+            PensionView pensionView = new PensionView(this.pensionManager.getById(selectModelId));
+            pensionView.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    makePensionTable();
+                }
+            });
+        });
+        this.seasonMenu.add("Delete").addActionListener(e -> {
+            int response = JOptionPane.showConfirmDialog(null, "Are you sure to delete?", "Warning!",JOptionPane.YES_NO_OPTION);
+            int selectModelId = this.getTableSelectedRow(this.tbl_pension, 0);
+            if (response==JOptionPane.YES_OPTION) {
+                this.pensionManager.deletePension(selectModelId);
+                JOptionPane.showMessageDialog(null, "Pension delete successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+                loadPensionModelTable(null);
+            } else {
+                JOptionPane.showMessageDialog(null, "Pension could not deleted", "Not Deleted", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+    }
+
+    private void loadSeasonComponent() {
         tableRowSelect(this.tbl_pension, this.pensionMenu);
         this.pensionMenu.add("New").addActionListener(e -> {
             PensionView pensionView = new PensionView(new Pension());
