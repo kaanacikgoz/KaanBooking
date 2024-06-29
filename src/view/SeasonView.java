@@ -62,12 +62,15 @@ public class SeasonView extends JFrame {
                 break;
             }
         }
+        //this.fld_startDate.setText(season.getStartDate().toString());
+        //this.fld_startDate.setText(season.getStartDate().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")));
+        //this.fld_finishDate.setText(season.getFinishDate().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")));
     }
 
     private void saveButton() {
         btn_save.addActionListener(e -> {
             if (this.season.getSeasonId() != 0) {
-                //this.seasonManager.updatePension(addPension());
+                this.seasonManager.updateSeason(addSeason());
             } else {
                 this.seasonManager.addSeason(addSeason());
             }

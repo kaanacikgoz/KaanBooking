@@ -34,7 +34,7 @@ public class SeasonManager {
     }
 
     public boolean addSeason(Season season) {
-        if (this.getById(season.getHotelId())!= null) {
+        if (this.getByHotelId(season.getHotelId())!= null) {
             JOptionPane.showMessageDialog(null,"Hotel season already selected!", "ERROR",JOptionPane.ERROR_MESSAGE);
             return false;
         }
@@ -42,13 +42,20 @@ public class SeasonManager {
         return this.seasonDao.addSeason(season);
     }
 
+    public boolean updateSeason(Season season) {
+        return this.seasonDao.updateSeason(season);
+    }
+
     public boolean deleteSeason(int season_id) {
         return this.seasonDao.deleteSeason(season_id);
     }
 
-    public Season getById(int id) {
-        return this.seasonDao.getById(id);
+    public Season getByHotelId(int id) {
+        return this.seasonDao.getByHotelId(id);
     }
 
+    public Season getBySeasonId(int id) {
+        return this.seasonDao.getBySeasonId(id);
+    }
 
 }

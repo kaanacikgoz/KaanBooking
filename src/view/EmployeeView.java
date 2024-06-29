@@ -151,8 +151,8 @@ public class EmployeeView extends JFrame {
             });
         });
         this.hotelMenu.add("Update").addActionListener(e -> {
-            int selectModelId = this.getTableSelectedRow(this.tbl_hotel, 0);
-            HotelView hotelView = new HotelView(this.hotelManager.getById(selectModelId));
+            int selectHotelId = this.getTableSelectedRow(this.tbl_hotel, 0);
+            HotelView hotelView = new HotelView(this.hotelManager.getById(selectHotelId));
             hotelView.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosed(WindowEvent e) {
@@ -162,9 +162,9 @@ public class EmployeeView extends JFrame {
         });
         this.hotelMenu.add("Delete").addActionListener(e -> {
             int response = JOptionPane.showConfirmDialog(null, "Are you sure to delete?", "Warning!",JOptionPane.YES_NO_OPTION);
-            int selectModelId = this.getTableSelectedRow(this.tbl_hotel, 0);
+            int selectHotelId = this.getTableSelectedRow(this.tbl_hotel, 0);
             if (response==JOptionPane.YES_OPTION) {
-                this.hotelManager.deleteHotel(selectModelId);
+                this.hotelManager.deleteHotel(selectHotelId);
                 JOptionPane.showMessageDialog(null, "Hotel delete successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
                 loadHotelModelTable(null);
             } else {
@@ -185,8 +185,8 @@ public class EmployeeView extends JFrame {
             });
         });
         this.pensionMenu.add("Update").addActionListener(e -> {
-            int selectModelId = this.getTableSelectedRow(this.tbl_pension, 0);
-            PensionView pensionView = new PensionView(this.pensionManager.getById(selectModelId));
+            int selectPensionId = this.getTableSelectedRow(this.tbl_pension, 0);
+            PensionView pensionView = new PensionView(this.pensionManager.getById(selectPensionId));
             pensionView.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosed(WindowEvent e) {
@@ -196,9 +196,9 @@ public class EmployeeView extends JFrame {
         });
         this.pensionMenu.add("Delete").addActionListener(e -> {
             int response = JOptionPane.showConfirmDialog(null, "Are you sure to delete?", "Warning!",JOptionPane.YES_NO_OPTION);
-            int selectModelId = this.getTableSelectedRow(this.tbl_pension, 0);
+            int selectPensionId = this.getTableSelectedRow(this.tbl_pension, 0);
             if (response==JOptionPane.YES_OPTION) {
-                this.pensionManager.deletePension(selectModelId);
+                this.pensionManager.deletePension(selectPensionId);
                 JOptionPane.showMessageDialog(null, "Pension delete successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
                 loadPensionModelTable(null);
             } else {
@@ -219,12 +219,12 @@ public class EmployeeView extends JFrame {
             });
         });
         this.seasonMenu.add("Update").addActionListener(e -> {
-            int selectModelId = this.getTableSelectedRow(this.tbl_pension, 0);
-            PensionView pensionView = new PensionView(this.pensionManager.getById(selectModelId));
-            pensionView.addWindowListener(new WindowAdapter() {
+            int selectSeasonId = this.getTableSelectedRow(this.tbl_season, 0);
+            SeasonView seasonView = new SeasonView(this.seasonManager.getBySeasonId(selectSeasonId));
+            seasonView.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosed(WindowEvent e) {
-                    makePensionTable();
+                    makeSeasonTable();
                 }
             });
         });
