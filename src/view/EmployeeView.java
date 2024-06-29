@@ -2,6 +2,7 @@ package view;
 
 import business.HotelManager;
 import business.PensionManager;
+import business.RoomManager;
 import business.SeasonManager;
 import entity.Hotel;
 import entity.Pension;
@@ -29,12 +30,15 @@ public class EmployeeView extends JFrame {
     private JLabel lbl_pension;
     private JLabel lbl_season;
     private JTabbedPane tabbedPane1;
+    private JTable tbl_room;
     private String[] hotelColumnNames;
     private String[] pensionColumnNames;
     private String[] seasonColumnNames;
+    private String[] roomColumnNames;
     private final HotelManager hotelManager;
     private final PensionManager pensionManager;
     private final SeasonManager seasonManager;
+    private final RoomManager roomManager;
     private final JPopupMenu hotelMenu = new JPopupMenu();
     private final JPopupMenu pensionMenu = new JPopupMenu();
     private final JPopupMenu seasonMenu = new JPopupMenu();
@@ -43,6 +47,7 @@ public class EmployeeView extends JFrame {
         this.hotelManager = new HotelManager();
         this.pensionManager = new PensionManager();
         this.seasonManager = new SeasonManager();
+        this.roomManager = new RoomManager();
         this.add(container);
         this.setSize(1250,500);
         this.setTitle("Employee View");
@@ -54,6 +59,7 @@ public class EmployeeView extends JFrame {
         makeHotelTable();
         makePensionTable();
         makeSeasonTable();
+        makeRoomTable();
         loadHotelComponent();
         loadPensionComponent();
         loadSeasonComponent();
@@ -66,7 +72,7 @@ public class EmployeeView extends JFrame {
         model.setColumnIdentifiers(hotelColumnNames);
         tbl_hotel.setModel(model);
         tbl_hotel.getTableHeader().setReorderingAllowed(false);
-        setTableWidth(this.tbl_hotel);
+        setHotelTableWidth(this.tbl_hotel);
         tbl_hotel.setEnabled(false);
 
         DefaultTableModel clearModel = (DefaultTableModel) tbl_hotel.getModel();
@@ -102,12 +108,13 @@ public class EmployeeView extends JFrame {
     }
 
     private void makeSeasonTable() {
-        seasonColumnNames = new String[]{"ID","Hotel ID","Hotel Name","Start Date","Finish Date"};
+        seasonColumnNames = new String[]{"ID","Hotel ID","Hotel Name","Start Date","Finish Date","Start Date2","Finish Date2"};
         DefaultTableModel model = new DefaultTableModel();
         model.setColumnIdentifiers(seasonColumnNames);
         tbl_season.setModel(model);
         tbl_season.getTableHeader().setReorderingAllowed(false);
         tbl_season.setEnabled(false);
+        setSeasonTableWidth(tbl_season);
 
         DefaultTableModel clearModel = (DefaultTableModel) tbl_season.getModel();
         clearModel.setRowCount(0);
@@ -121,7 +128,29 @@ public class EmployeeView extends JFrame {
         }
     }
 
-    private void setTableWidth(JTable table) {
+    private void makeRoomTable() {
+        roomColumnNames = new String[]{"ID","Hotel ID","Hotel Name","Start Date","Finish Date"};
+        DefaultTableModel model = new DefaultTableModel();
+        model.setColumnIdentifiers(roomColumnNames);
+        tbl_room.setModel(model);
+        tbl_room.getTableHeader().setReorderingAllowed(false);
+        tbl_room.setEnabled(false);
+
+        DefaultTableModel clearModel = (DefaultTableModel) tbl_room.getModel();
+        clearModel.setRowCount(0);
+        //Burda kaldım !!!!!
+        /*ArrayList<Object[]> seasonRow = this.roomManager.getForTable(roomColumnNames.length, this.seasonManager.findAll());
+        if (seasonRow==null) {
+            seasonRow = new ArrayList<>();
+        }
+        for (Object[] row:seasonRow) {
+            model.addRow(row);
+        }
+
+         */
+    }
+
+    private void setHotelTableWidth(JTable table) {
         table.getColumnModel().getColumn(0).setMaxWidth(25);
         table.getColumnModel().getColumn(1).setMaxWidth(125);
         table.getColumnModel().getColumn(2).setMaxWidth(50);
@@ -137,6 +166,11 @@ public class EmployeeView extends JFrame {
         table.getColumnModel().getColumn(12).setMaxWidth(75);
         table.getColumnModel().getColumn(13).setMaxWidth(50);
         table.getColumnModel().getColumn(14).setMaxWidth(125);
+    }
+
+    private void setSeasonTableWidth(JTable table) {
+        table.getColumnModel().getColumn(0).setMaxWidth(35);
+        table.getColumnModel().getColumn(1).setMaxWidth(60);
     }
 
     private void loadHotelComponent() {

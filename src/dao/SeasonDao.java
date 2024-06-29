@@ -1,7 +1,6 @@
 package dao;
 
 import core.Database;
-import entity.Pension;
 import entity.Season;
 
 import java.sql.*;
@@ -30,6 +29,8 @@ public class SeasonDao {
                 season.setHotelName(resultSet.getString("hotel_name"));
                 season.setStartDate(LocalDate.parse(resultSet.getString("start_date")));
                 season.setFinishDate(LocalDate.parse(resultSet.getString("finish_date")));
+                season.setStartDate2(LocalDate.parse(resultSet.getString("start_date2")));
+                season.setFinishDate2(LocalDate.parse(resultSet.getString("finish_date2")));
                 seasonList.add(season);
             }
         } catch (SQLException e) {
@@ -39,9 +40,9 @@ public class SeasonDao {
     }
 
     public boolean addSeason(Season season) {
-        String query = "INSERT INTO public.season (hotel_id, hotel_name, start_date, finish_date ) " +
+        String query = "INSERT INTO public.season (hotel_id, hotel_name, start_date, finish_date, start_date2, finish_date2 ) " +
                 "VALUES ( " +
-                "?,?,?,?" +
+                "?,?,?,?,?,?" +
                 " )";
         try {
             PreparedStatement preparedStatement = this.connection.prepareStatement(query);
@@ -49,6 +50,8 @@ public class SeasonDao {
             preparedStatement.setString(2,season.getHotelName());
             preparedStatement.setDate(3,Date.valueOf(season.getStartDate()));
             preparedStatement.setDate(4,Date.valueOf(season.getFinishDate()));
+            preparedStatement.setDate(5,Date.valueOf(season.getStartDate2()));
+            preparedStatement.setDate(6,Date.valueOf(season.getFinishDate2()));
             return preparedStatement.executeUpdate() != -1;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -58,7 +61,7 @@ public class SeasonDao {
 
     public boolean updateSeason(Season season) {
         String query = "UPDATE public.season " +
-                "SET hotel_id=?, hotel_name=?, start_date=? , finish_date=?" +
+                "SET hotel_id=?, hotel_name=?, start_date=? , finish_date=?, start_date2=? , finish_date2=?" +
                 "WHERE season_id=?";
         try {
             PreparedStatement preparedStatement = this.connection.prepareStatement(query);
@@ -66,7 +69,9 @@ public class SeasonDao {
             preparedStatement.setString(2,season.getHotelName());
             preparedStatement.setDate(3,Date.valueOf(season.getStartDate()));
             preparedStatement.setDate(4,Date.valueOf(season.getFinishDate()));
-            preparedStatement.setInt(5,season.getSeasonId());
+            preparedStatement.setDate(5,Date.valueOf(season.getStartDate2()));
+            preparedStatement.setDate(6,Date.valueOf(season.getFinishDate2()));
+            preparedStatement.setInt(7,season.getSeasonId());
             return preparedStatement.executeUpdate() != -1;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -102,6 +107,8 @@ public class SeasonDao {
                 season.setHotelName(resultSet.getString("hotel_name"));
                 season.setStartDate(LocalDate.parse(resultSet.getString("start_date")));
                 season.setFinishDate(LocalDate.parse(resultSet.getString("finish_date")));
+                season.setStartDate2(LocalDate.parse(resultSet.getString("start_date2")));
+                season.setFinishDate2(LocalDate.parse(resultSet.getString("finish_date2")));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -124,6 +131,8 @@ public class SeasonDao {
                 season.setHotelName(resultSet.getString("hotel_name"));
                 season.setStartDate(LocalDate.parse(resultSet.getString("start_date")));
                 season.setFinishDate(LocalDate.parse(resultSet.getString("finish_date")));
+                season.setStartDate2(LocalDate.parse(resultSet.getString("start_date2")));
+                season.setFinishDate2(LocalDate.parse(resultSet.getString("finish_date2")));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());

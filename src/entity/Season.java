@@ -9,6 +9,8 @@ public class Season {
     private String hotelName;
     private LocalDate startDate;
     private LocalDate finishDate;
+    private LocalDate startDate2;
+    private LocalDate finishDate2;
 
     public Season() {
 
@@ -52,6 +54,22 @@ public class Season {
 
     public void setFinishDate(LocalDate finishDate) {
         this.finishDate = finishDate;
+    }
+
+    public LocalDate getStartDate2() {
+        return startDate2;
+    }
+
+    public void setStartDate2(LocalDate startDate2) {
+        this.startDate2 = startDate2;
+    }
+
+    public LocalDate getFinishDate2() {
+        return finishDate2;
+    }
+
+    public void setFinishDate2(LocalDate finishDate2) {
+        this.finishDate2 = finishDate2;
     }
 
 }
