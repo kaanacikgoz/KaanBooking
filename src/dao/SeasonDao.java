@@ -1,13 +1,9 @@
 package dao;
 
 import core.Database;
-import entity.Pension;
 import entity.Season;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -39,6 +35,59 @@ public class SeasonDao {
             System.out.println(e.getMessage());
         }
         return seasonList;
+    }
+
+    public boolean addSeason(Season season) {
+        String query = "INSERT INTO public.season (hotel_id, hotel_name, start_date, finish_date ) " +
+                "VALUES ( " +
+                "?,?,?,?" +
+                " )";
+        try {
+            PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+            preparedStatement.setInt(1,season.getHotelId());
+            preparedStatement.setString(2,season.getHotelName());
+            preparedStatement.setDate(3,Date.valueOf(season.getStartDate()));
+            preparedStatement.setDate(4,Date.valueOf(season.getFinishDate()));
+            return preparedStatement.executeUpdate() != -1;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return true;
+    }
+
+    public boolean deleteSeason(int season_id) {
+        String query = "DELETE FROM public.season " +
+                        "WHERE season_id=?";
+        try {
+            PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+            preparedStatement.setInt(1, season_id);
+            return preparedStatement.executeUpdate() != -1;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return true;
+    }
+
+    public Season getById(int id) {
+        Season season=null;
+        String query = "SELECT * FROM public.season " +
+                        "WHERE hotel_id=?";
+        try {
+            PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+            preparedStatement.setInt(1,id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                season = new Season();
+                season.setSeasonId(resultSet.getInt("season_id"));
+                season.setHotelId(resultSet.getInt("hotel_id"));
+                season.setHotelName(resultSet.getString("hotel_name"));
+                season.setStartDate(LocalDate.parse(resultSet.getString("start_date")));
+                season.setFinishDate(LocalDate.parse(resultSet.getString("finish_date")));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return season;
     }
 
 }
