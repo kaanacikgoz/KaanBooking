@@ -29,8 +29,6 @@ public class SeasonDao {
                 season.setHotelName(resultSet.getString("hotel_name"));
                 season.setStartDate(LocalDate.parse(resultSet.getString("start_date")));
                 season.setFinishDate(LocalDate.parse(resultSet.getString("finish_date")));
-                season.setStartDate2(LocalDate.parse(resultSet.getString("start_date2")));
-                season.setFinishDate2(LocalDate.parse(resultSet.getString("finish_date2")));
                 seasonList.add(season);
             }
         } catch (SQLException e) {
@@ -40,9 +38,9 @@ public class SeasonDao {
     }
 
     public boolean addSeason(Season season) {
-        String query = "INSERT INTO public.season (hotel_id, hotel_name, start_date, finish_date, start_date2, finish_date2 ) " +
+        String query = "INSERT INTO public.season (hotel_id, hotel_name, start_date, finish_date) " +
                 "VALUES ( " +
-                "?,?,?,?,?,?" +
+                "?,?,?,?" +
                 " )";
         try {
             PreparedStatement preparedStatement = this.connection.prepareStatement(query);
@@ -50,8 +48,6 @@ public class SeasonDao {
             preparedStatement.setString(2,season.getHotelName());
             preparedStatement.setDate(3,Date.valueOf(season.getStartDate()));
             preparedStatement.setDate(4,Date.valueOf(season.getFinishDate()));
-            preparedStatement.setDate(5,Date.valueOf(season.getStartDate2()));
-            preparedStatement.setDate(6,Date.valueOf(season.getFinishDate2()));
             return preparedStatement.executeUpdate() != -1;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -61,7 +57,7 @@ public class SeasonDao {
 
     public boolean updateSeason(Season season) {
         String query = "UPDATE public.season " +
-                "SET hotel_id=?, hotel_name=?, start_date=? , finish_date=?, start_date2=? , finish_date2=?" +
+                "SET hotel_id=?, hotel_name=?, start_date=? , finish_date=?" +
                 "WHERE season_id=?";
         try {
             PreparedStatement preparedStatement = this.connection.prepareStatement(query);
@@ -69,9 +65,7 @@ public class SeasonDao {
             preparedStatement.setString(2,season.getHotelName());
             preparedStatement.setDate(3,Date.valueOf(season.getStartDate()));
             preparedStatement.setDate(4,Date.valueOf(season.getFinishDate()));
-            preparedStatement.setDate(5,Date.valueOf(season.getStartDate2()));
-            preparedStatement.setDate(6,Date.valueOf(season.getFinishDate2()));
-            preparedStatement.setInt(7,season.getSeasonId());
+            preparedStatement.setInt(5,season.getSeasonId());
             return preparedStatement.executeUpdate() != -1;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -81,7 +75,7 @@ public class SeasonDao {
 
     public boolean deleteSeason(int season_id) {
         String query = "DELETE FROM public.season " +
-                        "WHERE season_id=?";
+                "WHERE season_id=?";
         try {
             PreparedStatement preparedStatement = this.connection.prepareStatement(query);
             preparedStatement.setInt(1, season_id);
@@ -95,7 +89,7 @@ public class SeasonDao {
     public Season getByHotelId(int id) {
         Season season=null;
         String query = "SELECT * FROM public.season " +
-                        "WHERE hotel_id=?";
+                "WHERE hotel_id=?";
         try {
             PreparedStatement preparedStatement = this.connection.prepareStatement(query);
             preparedStatement.setInt(1,id);
@@ -107,8 +101,6 @@ public class SeasonDao {
                 season.setHotelName(resultSet.getString("hotel_name"));
                 season.setStartDate(LocalDate.parse(resultSet.getString("start_date")));
                 season.setFinishDate(LocalDate.parse(resultSet.getString("finish_date")));
-                season.setStartDate2(LocalDate.parse(resultSet.getString("start_date2")));
-                season.setFinishDate2(LocalDate.parse(resultSet.getString("finish_date2")));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -131,13 +123,34 @@ public class SeasonDao {
                 season.setHotelName(resultSet.getString("hotel_name"));
                 season.setStartDate(LocalDate.parse(resultSet.getString("start_date")));
                 season.setFinishDate(LocalDate.parse(resultSet.getString("finish_date")));
-                season.setStartDate2(LocalDate.parse(resultSet.getString("start_date2")));
-                season.setFinishDate2(LocalDate.parse(resultSet.getString("finish_date2")));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         return season;
+    }
+
+    public ArrayList<Season> getSeasonsByHotelId(int hotelId) {
+        ArrayList<Season> seasons = new ArrayList<>();
+        String query = "SELECT * FROM public.season WHERE hotel_id = ?";
+
+        try (PreparedStatement preparedStatement = this.connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, hotelId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Season season = new Season();
+                season.setSeasonId(resultSet.getInt("season_id"));
+                season.setHotelId(resultSet.getInt("hotel_id"));
+                season.setHotelName(resultSet.getString("hotel_name"));
+                season.setStartDate(resultSet.getDate("start_date").toLocalDate());
+                season.setFinishDate(resultSet.getDate("finish_date").toLocalDate());
+                seasons.add(season);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return seasons;
     }
 
 }

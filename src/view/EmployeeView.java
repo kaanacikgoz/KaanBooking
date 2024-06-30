@@ -108,7 +108,7 @@ public class EmployeeView extends JFrame {
     }
 
     private void makeSeasonTable() {
-        seasonColumnNames = new String[]{"ID","Hotel ID","Hotel Name","Start Date","Finish Date","Start Date2","Finish Date2"};
+        seasonColumnNames = new String[]{"ID","Hotel ID","Hotel Name","Start Date","Finish Date"};
         DefaultTableModel model = new DefaultTableModel();
         model.setColumnIdentifiers(seasonColumnNames);
         tbl_season.setModel(model);
@@ -129,25 +129,25 @@ public class EmployeeView extends JFrame {
     }
 
     private void makeRoomTable() {
-        roomColumnNames = new String[]{"ID","Hotel ID","Hotel Name","Start Date","Finish Date"};
+        roomColumnNames = new String[]{"ID","Hotel ID","Pension ID","Season ID","Room Type","Room Stock", "Bed Num",
+                "Square Meters","TV","MiniBar","Game Console","Hotel Safe","Projection","Child Price","Adult Price"};
         DefaultTableModel model = new DefaultTableModel();
         model.setColumnIdentifiers(roomColumnNames);
         tbl_room.setModel(model);
         tbl_room.getTableHeader().setReorderingAllowed(false);
         tbl_room.setEnabled(false);
+        setRoomTableWidth(tbl_room);
 
         DefaultTableModel clearModel = (DefaultTableModel) tbl_room.getModel();
         clearModel.setRowCount(0);
-        //Burda kaldım !!!!!
-        /*ArrayList<Object[]> seasonRow = this.roomManager.getForTable(roomColumnNames.length, this.seasonManager.findAll());
+
+        ArrayList<Object[]> seasonRow = this.roomManager.getForTable(roomColumnNames.length, this.roomManager.findAll());
         if (seasonRow==null) {
             seasonRow = new ArrayList<>();
         }
         for (Object[] row:seasonRow) {
             model.addRow(row);
         }
-
-         */
     }
 
     private void setHotelTableWidth(JTable table) {
@@ -171,6 +171,13 @@ public class EmployeeView extends JFrame {
     private void setSeasonTableWidth(JTable table) {
         table.getColumnModel().getColumn(0).setMaxWidth(35);
         table.getColumnModel().getColumn(1).setMaxWidth(60);
+    }
+
+    private void setRoomTableWidth(JTable table) {
+        table.getColumnModel().getColumn(0).setMaxWidth(25);
+        table.getColumnModel().getColumn(1).setMaxWidth(50);
+        table.getColumnModel().getColumn(2).setMaxWidth(65);
+        table.getColumnModel().getColumn(3).setMaxWidth(60);
     }
 
     private void loadHotelComponent() {
@@ -199,8 +206,8 @@ public class EmployeeView extends JFrame {
             int selectHotelId = this.getTableSelectedRow(this.tbl_hotel, 0);
             if (response==JOptionPane.YES_OPTION) {
                 this.hotelManager.deleteHotel(selectHotelId);
-                JOptionPane.showMessageDialog(null, "Hotel delete successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
                 loadHotelModelTable(null);
+                JOptionPane.showMessageDialog(null, "Hotel delete successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(null, "Hotel could not deleted", "Not Deleted", JOptionPane.INFORMATION_MESSAGE);
             }
@@ -233,8 +240,8 @@ public class EmployeeView extends JFrame {
             int selectPensionId = this.getTableSelectedRow(this.tbl_pension, 0);
             if (response==JOptionPane.YES_OPTION) {
                 this.pensionManager.deletePension(selectPensionId);
-                JOptionPane.showMessageDialog(null, "Pension delete successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
                 loadPensionModelTable(null);
+                JOptionPane.showMessageDialog(null, "Pension delete successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(null, "Pension could not deleted", "Not Deleted", JOptionPane.INFORMATION_MESSAGE);
             }
@@ -267,8 +274,8 @@ public class EmployeeView extends JFrame {
             int selectModelId = this.getTableSelectedRow(this.tbl_season, 0);
             if (response==JOptionPane.YES_OPTION) {
                 this.seasonManager.deleteSeason(selectModelId);
-                JOptionPane.showMessageDialog(null, "Season delete successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
                 loadSeasonModelTable(null);
+                JOptionPane.showMessageDialog(null, "Season delete successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(null, "Season could not deleted", "Not Deleted", JOptionPane.INFORMATION_MESSAGE);
             }
@@ -328,6 +335,18 @@ public class EmployeeView extends JFrame {
             seasonList = this.seasonManager.getForTable(this.seasonColumnNames.length, this.seasonManager.findAll());
         }
         for (Object[] row : seasonList) {
+            model.addRow(row);
+        }
+    }
+
+    public void loadRoomModelTable(ArrayList<Object[]> roomList) {
+        DefaultTableModel model = (DefaultTableModel) tbl_room.getModel();
+        model.setRowCount(0); // Clear the table
+
+        if (roomList == null) {
+            roomList = this.roomManager.getForTable(this.roomColumnNames.length, this.roomManager.findAll());
+        }
+        for (Object[] row : roomList) {
             model.addRow(row);
         }
     }

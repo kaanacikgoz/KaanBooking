@@ -23,10 +23,6 @@ public class SeasonView extends JFrame {
     private JLabel lbl_startDate;
     private JLabel lbl_finishDate;
     private JComboBox<ComboItem> cmb_hotel;
-    private JFormattedTextField fld_startDate2;
-    private JFormattedTextField fld_finishDate2;
-    private JLabel lbl_startDate2;
-    private JLabel lbl_finishDate2;
     private final Season season;
     private final HotelManager hotelManager;
     private final SeasonManager seasonManager;
@@ -90,9 +86,6 @@ public class SeasonView extends JFrame {
             fld_startDate = new JFormattedTextField(dateFormatter);
             fld_finishDate = new JFormattedTextField(dateFormatter);
 
-            fld_startDate2 = new JFormattedTextField(dateFormatter);
-            fld_finishDate2 = new JFormattedTextField(dateFormatter);
-
         } catch (ParseException e) {
             System.out.println(e.getMessage());
         }
@@ -112,9 +105,6 @@ public class SeasonView extends JFrame {
         }
         season.setStartDate(LocalDate.parse(fld_startDate.getText(), DateTimeFormatter.ofPattern("yyyy/MM/dd")));
         season.setFinishDate(LocalDate.parse(fld_finishDate.getText(), DateTimeFormatter.ofPattern("yyyy/MM/dd")));
-
-        season.setStartDate2(LocalDate.parse(fld_startDate2.getText(), DateTimeFormatter.ofPattern("yyyy/MM/dd")));
-        season.setFinishDate2(LocalDate.parse(fld_finishDate2.getText(), DateTimeFormatter.ofPattern("yyyy/MM/dd")));
 
         return season;
     }
