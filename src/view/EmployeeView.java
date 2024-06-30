@@ -6,6 +6,7 @@ import business.RoomManager;
 import business.SeasonManager;
 import entity.Hotel;
 import entity.Pension;
+import entity.Room;
 import entity.Season;
 
 import javax.swing.*;
@@ -42,6 +43,7 @@ public class EmployeeView extends JFrame {
     private final JPopupMenu hotelMenu = new JPopupMenu();
     private final JPopupMenu pensionMenu = new JPopupMenu();
     private final JPopupMenu seasonMenu = new JPopupMenu();
+    private final JPopupMenu roomMenu = new JPopupMenu();
 
     public EmployeeView() {
         this.hotelManager = new HotelManager();
@@ -57,12 +59,16 @@ public class EmployeeView extends JFrame {
         this.setVisible(true);
 
         makeHotelTable();
-        makePensionTable();
-        makeSeasonTable();
-        makeRoomTable();
         loadHotelComponent();
+
+        makePensionTable();
         loadPensionComponent();
+
+        makeSeasonTable();
         loadSeasonComponent();
+
+        makeRoomTable();
+        loadRoomComponent();
     }
 
     private void makeHotelTable() {
@@ -282,13 +288,47 @@ public class EmployeeView extends JFrame {
         });
         this.seasonMenu.add("Delete").addActionListener(e -> {
             int response = JOptionPane.showConfirmDialog(null, "Are you sure to delete?", "Warning!",JOptionPane.YES_NO_OPTION);
-            int selectModelId = this.getTableSelectedRow(this.tbl_season, 0);
+            int selectSeasonId = this.getTableSelectedRow(this.tbl_season, 0);
             if (response==JOptionPane.YES_OPTION) {
-                this.seasonManager.deleteSeason(selectModelId);
+                this.seasonManager.deleteSeason(selectSeasonId);
                 loadSeasonModelTable(null);
                 JOptionPane.showMessageDialog(null, "Season delete successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(null, "Season could not deleted", "Not Deleted", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+    }
+
+    private void loadRoomComponent() {
+        tableRowSelect(this.tbl_room, this.roomMenu);
+        this.roomMenu.add("New").addActionListener(e -> {
+            RoomView roomView = new RoomView(new Room());
+            roomView.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    makeRoomTable();
+                }
+            });
+        });
+        this.roomMenu.add("Update").addActionListener(e -> {
+            int selectRoomId = this.getTableSelectedRow(this.tbl_room, 0);
+            RoomView roomView = new RoomView(this.roomManager.getByRoomId(selectRoomId));
+            roomView.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    makeRoomTable();
+                }
+            });
+        });
+        this.roomMenu.add("Delete").addActionListener(e -> {
+            int response = JOptionPane.showConfirmDialog(null, "Are you sure to delete?", "Warning!",JOptionPane.YES_NO_OPTION);
+            int selectRoomId = this.getTableSelectedRow(this.tbl_room, 0);
+            if (response==JOptionPane.YES_OPTION) {
+                this.roomManager.deleteRoom(selectRoomId);
+                loadRoomModelTable(null);
+                JOptionPane.showMessageDialog(null, "Room delete successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "Room could not deleted", "Not Deleted", JOptionPane.INFORMATION_MESSAGE);
             }
         });
     }

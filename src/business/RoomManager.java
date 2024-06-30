@@ -2,6 +2,7 @@ package business;
 
 import dao.RoomDao;
 import entity.Room;
+import entity.Season;
 
 import java.util.ArrayList;
 
@@ -40,6 +41,22 @@ public class RoomManager {
 
     public ArrayList<Room> findAll() {
         return this.roomDao.findAll();
+    }
+
+    public boolean addRoom(Room room) {
+        return this.roomDao.addRoom(room);
+    }
+
+    public boolean updateRoom(Room room) {
+        return this.roomDao.updateRoom(room);
+    }
+
+    public boolean deleteRoom(int room_id) {
+        return this.roomDao.deleteRoom(room_id);
+    }
+
+    public Room getByRoomId(int id) {
+        return this.roomDao.getByRoomId(id);
     }
 
 }
