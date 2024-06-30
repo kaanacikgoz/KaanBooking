@@ -178,6 +178,17 @@ public class EmployeeView extends JFrame {
         table.getColumnModel().getColumn(1).setMaxWidth(50);
         table.getColumnModel().getColumn(2).setMaxWidth(65);
         table.getColumnModel().getColumn(3).setMaxWidth(60);
+        table.getColumnModel().getColumn(4).setMaxWidth(200);
+        table.getColumnModel().getColumn(5).setMaxWidth(100);
+        table.getColumnModel().getColumn(6).setMaxWidth(75);
+        table.getColumnModel().getColumn(7).setMaxWidth(100);
+        table.getColumnModel().getColumn(8).setMaxWidth(50);
+        table.getColumnModel().getColumn(9).setMaxWidth(100);
+        table.getColumnModel().getColumn(10).setMaxWidth(125);
+        table.getColumnModel().getColumn(11).setMaxWidth(100);
+        table.getColumnModel().getColumn(12).setMaxWidth(100);
+        table.getColumnModel().getColumn(13).setMaxWidth(100);
+        table.getColumnModel().getColumn(14).setMaxWidth(100);
     }
 
     private void loadHotelComponent() {
