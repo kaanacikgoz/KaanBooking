@@ -422,7 +422,10 @@ public class EmployeeView extends JFrame {
         });
         //Evaluation Form-18
         this.roomMenu.add("Create a Booking").addActionListener(e -> {
-            BookingView bookingView = new BookingView(new Booking(),
+            int selectRoomId = this.getTableSelectedRow(this.tbl_room, 0);
+            System.out.println(selectRoomId);
+
+            BookingView bookingView = new BookingView(selectRoomId,new Booking(),
                     fld_startDate.getText(),
                     fld_finishDate.getText());
             bookingView.addWindowListener(new WindowAdapter() {
@@ -439,7 +442,7 @@ public class EmployeeView extends JFrame {
         //Evaluation Form-21
         this.bookingMenu.add("Update").addActionListener(e -> {
             int selectBookingId = this.getTableSelectedRow(this.tbl_booking, 0);
-            BookingView bookingView = new BookingView(this.bookingManager.getByBookingId(selectBookingId),
+            BookingView bookingView = new BookingView(0,this.bookingManager.getByBookingId(selectBookingId),
                     this.fld_startDate.getText(),
                     this.fld_finishDate.getText());
             bookingView.addWindowListener(new WindowAdapter() {

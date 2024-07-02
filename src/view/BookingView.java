@@ -36,13 +36,15 @@ public class BookingView extends JFrame {
     private JLabel lbl_startDate;
     private JLabel lbl_finishDate;
     private final Booking booking;
+    private final int room_Id;
     private final BookingManager bookingManager;
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 
-    public BookingView(Booking booking, String start_date, String finish_date) {
+    public BookingView(int roomId,Booking booking, String start_date, String finish_date) {
         this.add(container);
         this.booking = booking;
         this.bookingManager = new BookingManager();
+        this.room_Id = roomId;
         this.setSize(650,550);
         this.setTitle("Booking View");
         int x = (Toolkit.getDefaultToolkit().getScreenSize().width - this.getSize().width) / 2;
@@ -70,6 +72,14 @@ public class BookingView extends JFrame {
     }
 
     private Booking addBooking() {
+        if(this.booking.getBookingId()!=0){
+            System.out.println(this.booking.getRoomId());
+            booking.setRoomId(this.booking.getRoomId());
+        }
+        else{
+            System.out.println(this.booking.getRoomId());
+            booking.setRoomId(room_Id);
+        }
         booking.setCustomerName(this.fld_name.getText());
         booking.setCustomerTc(this.fld_tc.getText());
         booking.setCustomerMail(this.fld_mail.getText());

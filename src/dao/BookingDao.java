@@ -49,6 +49,7 @@ public class BookingDao {
                 "?,?,?,?,?,?,?,?,?,?,?" +
                 " )";
         try {
+            System.out.println(booking.getRoomId());
             PreparedStatement preparedStatement = this.connection.prepareStatement(query);
             preparedStatement.setInt(1,booking.getRoomId());
             preparedStatement.setString(2,booking.getCustomerName());
