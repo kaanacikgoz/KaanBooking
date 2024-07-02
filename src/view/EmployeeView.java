@@ -1,21 +1,15 @@
 package view;
 
-import business.HotelManager;
-import business.PensionManager;
-import business.RoomManager;
-import business.SeasonManager;
-import entity.Hotel;
-import entity.Pension;
-import entity.Room;
-import entity.Season;
+import business.*;
+import core.ComboItem;
+import entity.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.MaskFormatter;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 public class EmployeeView extends JFrame {
@@ -27,29 +21,46 @@ public class EmployeeView extends JFrame {
     public JLabel lbl_welcome;
     private JTable tbl_pension;
     private JTable tbl_season;
-    private JTabbedPane tabbedPane4;
+    private JTabbedPane tab_menu;
     private JLabel lbl_pension;
     private JLabel lbl_season;
-    private JTabbedPane tabbedPane1;
+    private JPanel pnl_room;
+    private JPanel pnl_hotel;
     private JTable tbl_room;
+    private JComboBox<ComboItem> cmb_city;
+    private JComboBox<ComboItem> cmb_hotelName;
+    private JFormattedTextField fld_startDate;
+    private JFormattedTextField fld_finishDate;
+    private JLabel lbl_startDate;
+    private JLabel lbl_finishDate;
+    private JLabel lbl_city;
+    private JLabel lbl_hotelName;
+    private JButton btn_clear;
+    private JButton btn_search;
+    private JTable tbl_booking;
+    private JPanel pnl_booking;
     private String[] hotelColumnNames;
     private String[] pensionColumnNames;
     private String[] seasonColumnNames;
     private String[] roomColumnNames;
+    private String[] bookingColumnNames;
     private final HotelManager hotelManager;
     private final PensionManager pensionManager;
     private final SeasonManager seasonManager;
     private final RoomManager roomManager;
+    private final BookingManager bookingManager;
     private final JPopupMenu hotelMenu = new JPopupMenu();
     private final JPopupMenu pensionMenu = new JPopupMenu();
     private final JPopupMenu seasonMenu = new JPopupMenu();
     private final JPopupMenu roomMenu = new JPopupMenu();
+    private final JPopupMenu bookingMenu = new JPopupMenu();
 
     public EmployeeView() {
         this.hotelManager = new HotelManager();
         this.pensionManager = new PensionManager();
         this.seasonManager = new SeasonManager();
         this.roomManager = new RoomManager();
+        this.bookingManager = new BookingManager();
         this.add(container);
         this.setSize(1250,500);
         this.setTitle("Employee View");
@@ -69,6 +80,51 @@ public class EmployeeView extends JFrame {
 
         makeRoomTable();
         loadRoomComponent();
+        loadRoomFilter();
+
+        makeBookingTable();
+        loadBookingComponent();
+
+        btn_clear.addActionListener(e -> {
+            loadRoomFilter();
+        });
+
+
+        btn_search.addActionListener(e -> {
+            ComboItem selectedCity = (ComboItem) this.cmb_city.getSelectedItem();
+            ComboItem selectedHotelName = (ComboItem) this.cmb_hotelName.getSelectedItem();
+
+            String city = selectedCity != null ? selectedCity.getValue() : null;
+            String hotelName = selectedHotelName != null ? selectedHotelName.getValue() : null;
+
+            ArrayList<Room> roomList = this.roomManager.searchForRooms(
+                    this.fld_startDate.getText(),
+                    this.fld_finishDate.getText(),
+                    city,
+                    hotelName
+            );
+            ArrayList<Object[]> roomBookingRow = this.roomManager.getForTable(this.roomColumnNames.length, roomList);
+            loadRoomModelTable(roomBookingRow);
+        });
+
+
+        btn_logout.addActionListener(e -> {
+            new LoginView();
+            dispose();
+        });
+    }
+
+    private void loadRoomFilter() {
+        this.cmb_city.removeAllItems();
+        this.cmb_hotelName.removeAllItems();
+
+        for (Hotel hotel : this.hotelManager.findAll()) {
+            this.cmb_city.addItem(new ComboItem(hotel.getId(), hotel.getCity()));
+            this.cmb_hotelName.addItem(new ComboItem(hotel.getId(), hotel.getName()));
+        }
+
+        this.cmb_city.setSelectedItem(null);
+        this.cmb_hotelName.setSelectedItem(null);
     }
 
     private void makeHotelTable() {
@@ -136,7 +192,7 @@ public class EmployeeView extends JFrame {
 
     private void makeRoomTable() {
         roomColumnNames = new String[]{"ID","Hotel ID","Pension ID","Season ID","Room Type","Room Stock", "Bed Num",
-                "Square Meters","TV","MiniBar","Game Console","Hotel Safe","Projection","Child Price","Adult Price"};
+                "Square Meters","TV","MiniBar","Game Console","Hotel Safe","Projection","Child Price","Adult Price","Room Price"};
         DefaultTableModel model = new DefaultTableModel();
         model.setColumnIdentifiers(roomColumnNames);
         tbl_room.setModel(model);
@@ -147,11 +203,34 @@ public class EmployeeView extends JFrame {
         DefaultTableModel clearModel = (DefaultTableModel) tbl_room.getModel();
         clearModel.setRowCount(0);
 
-        ArrayList<Object[]> seasonRow = this.roomManager.getForTable(roomColumnNames.length, this.roomManager.findAll());
-        if (seasonRow==null) {
-            seasonRow = new ArrayList<>();
+
+        ArrayList<Object[]> roomRow = this.roomManager.getForTable(roomColumnNames.length, this.roomManager.findAll());
+        if (roomRow==null) {
+            roomRow = new ArrayList<>();
         }
-        for (Object[] row:seasonRow) {
+        for (Object[] row:roomRow) {
+            model.addRow(row);
+        }
+
+    }
+
+    private void makeBookingTable() {
+        bookingColumnNames = new String[]{"ID","Room ID","Customer Name","Customer TC","Customer Mail","Customer Phone",
+                "Start Date", "Finish Date", "Child Number", "Adult Number", "Total Price", "Customer Note"};
+        DefaultTableModel model = new DefaultTableModel();
+        model.setColumnIdentifiers(bookingColumnNames);
+        tbl_booking.setModel(model);
+        tbl_booking.getTableHeader().setReorderingAllowed(false);
+        tbl_booking.setEnabled(false);
+
+        DefaultTableModel clearModel = (DefaultTableModel) tbl_booking.getModel();
+        clearModel.setRowCount(0);
+
+        ArrayList<Object[]> bookingRow = this.bookingManager.getForTable(bookingColumnNames.length, this.bookingManager.findAll());
+        if (bookingRow==null) {
+            bookingRow = new ArrayList<>();
+        }
+        for (Object[] row:bookingRow) {
             model.addRow(row);
         }
     }
@@ -195,6 +274,7 @@ public class EmployeeView extends JFrame {
         table.getColumnModel().getColumn(12).setMaxWidth(100);
         table.getColumnModel().getColumn(13).setMaxWidth(100);
         table.getColumnModel().getColumn(14).setMaxWidth(100);
+        table.getColumnModel().getColumn(15).setMaxWidth(100);
     }
 
     private void loadHotelComponent() {
@@ -331,6 +411,44 @@ public class EmployeeView extends JFrame {
                 JOptionPane.showMessageDialog(null, "Room could not deleted", "Not Deleted", JOptionPane.INFORMATION_MESSAGE);
             }
         });
+        this.roomMenu.add("Create a Booking").addActionListener(e -> {
+            BookingView bookingView = new BookingView(new Booking(),
+                    fld_startDate.getText(),
+                    fld_finishDate.getText());
+            bookingView.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    makeBookingTable();
+                }
+            });
+        });
+    }
+
+    private void loadBookingComponent() {
+        tableRowSelect(this.tbl_booking, this.bookingMenu);
+        this.bookingMenu.add("Update").addActionListener(e -> {
+            int selectBookingId = this.getTableSelectedRow(this.tbl_booking, 0);
+            BookingView bookingView = new BookingView(this.bookingManager.getByBookingId(selectBookingId),
+                    this.fld_startDate.getText(),
+                    this.fld_finishDate.getText());
+            bookingView.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    makeBookingTable();
+                }
+            });
+        });
+        this.bookingMenu.add("Delete").addActionListener(e -> {
+            int response = JOptionPane.showConfirmDialog(null, "Are you sure to delete?", "Warning!",JOptionPane.YES_NO_OPTION);
+            int selectBookingId = this.getTableSelectedRow(this.tbl_booking, 0);
+            if (response==JOptionPane.YES_OPTION) {
+                this.bookingManager.deleteBooking(selectBookingId);
+                loadBookingModelTable(null);
+                JOptionPane.showMessageDialog(null, "Booking delete successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "Booking could not deleted", "Not Deleted", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
     }
 
     public void tableRowSelect(JTable table, JPopupMenu menu) {
@@ -399,6 +517,29 @@ public class EmployeeView extends JFrame {
         }
         for (Object[] row : roomList) {
             model.addRow(row);
+        }
+    }
+
+    public void loadBookingModelTable(ArrayList<Object[]> bookingList) {
+        DefaultTableModel model = (DefaultTableModel) tbl_booking.getModel();
+        model.setRowCount(0); // Clear the table
+
+        if (bookingList == null) {
+            bookingList = this.bookingManager.getForTable(this.bookingColumnNames.length, this.bookingManager.findAll());
+        }
+        for (Object[] row : bookingList) {
+            model.addRow(row);
+        }
+    }
+
+    private void createUIComponents() {
+        try {
+            this.fld_startDate = new JFormattedTextField(new MaskFormatter("####/##/##"));
+            this.fld_startDate.setText("2024/06/10");
+            this.fld_finishDate = new JFormattedTextField(new MaskFormatter("####/##/##"));
+            this.fld_finishDate.setText("2024/06/13");
+        } catch (ParseException e) {
+            System.out.println(e.getMessage());
         }
     }
 

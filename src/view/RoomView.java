@@ -40,6 +40,8 @@ public class RoomView extends JFrame {
     private JCheckBox chck_hotelSafe;
     private JCheckBox chck_projection;
     private JButton btn_save;
+    private JTextField fld_roomPrice;
+    private JLabel lbl_roomPrice;
     private final Room room;
     private final HotelManager hotelManager;
     private final PensionManager pensionManager;
@@ -53,7 +55,7 @@ public class RoomView extends JFrame {
         this.seasonManager = new SeasonManager();
         this.roomManager = new RoomManager();
         this.add(container);
-        this.setSize(500,500);
+        this.setSize(500,550);
         this.setTitle("Room View");
         int x = (Toolkit.getDefaultToolkit().getScreenSize().width - this.getSize().width) / 2;
         int y = (Toolkit.getDefaultToolkit().getScreenSize().height - this.getSize().height) / 2;

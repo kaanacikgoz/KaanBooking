@@ -40,6 +40,10 @@ public class AdminView extends JFrame {
         makeTable();
         loadUserComponent();
 
+        btn_logout.addActionListener(e -> {
+            new LoginView();
+            dispose();
+        });
     }
 
     private void loadUserRoleFilter() {
