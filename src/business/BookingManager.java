@@ -56,4 +56,12 @@ public class BookingManager {
         return this.bookingDao.deleteBooking(booking_id);
     }
 
+    public boolean minusRoomStock(int roomId) {
+        return this.bookingDao.minusRoomStock(roomId);
+    }
+
+    public boolean plusRoomStock(int roomId) {
+        return this.bookingDao.plusRoomStock(roomId);
+    }
+
 }

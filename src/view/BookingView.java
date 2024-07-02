@@ -27,7 +27,6 @@ public class BookingView extends JFrame {
     private JTextField fld_adultNum;
     private JLabel lbl_childNum;
     private JLabel lbl_adultNum;
-    private JButton btn_calculate;
     private JTextField fld_totalPrice;
     private JButton btn_save;
     private JLabel lbl_totalPrice;

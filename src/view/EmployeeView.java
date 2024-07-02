@@ -432,6 +432,8 @@ public class EmployeeView extends JFrame {
                 @Override
                 public void windowClosed(WindowEvent e) {
                     makeBookingTable();
+                    bookingManager.minusRoomStock(selectRoomId);
+                    makeRoomTable();
                 }
             });
         });
@@ -456,9 +458,12 @@ public class EmployeeView extends JFrame {
         this.bookingMenu.add("Delete").addActionListener(e -> {
             int response = JOptionPane.showConfirmDialog(null, "Are you sure to delete?", "Warning!",JOptionPane.YES_NO_OPTION);
             int selectBookingId = this.getTableSelectedRow(this.tbl_booking, 0);
+            int selectRoomId = this.getTableSelectedRow(tbl_booking,1);
             if (response==JOptionPane.YES_OPTION) {
                 this.bookingManager.deleteBooking(selectBookingId);
                 loadBookingModelTable(null);
+                bookingManager.plusRoomStock(selectRoomId);
+                makeRoomTable();
                 //Evaluation Form-24
                 JOptionPane.showMessageDialog(null, "Booking delete successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
             } else {

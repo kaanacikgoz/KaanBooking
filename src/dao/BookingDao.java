@@ -165,4 +165,32 @@ public class BookingDao {
         return bookingList;
     }
 
+    public boolean minusRoomStock(int roomId) {
+        String updateQuery = "UPDATE public.room SET room_stock = room_stock-1 WHERE room_id=?";
+
+        try {
+            PreparedStatement preparedStatement = this.connection.prepareStatement(updateQuery);
+            preparedStatement.setInt(1,roomId);
+            int rowUpdate = preparedStatement.executeUpdate();
+            return rowUpdate>0;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean plusRoomStock(int roomId) {
+        String updateQuery = "UPDATE public.room SET room_stock = room_stock+1 WHERE room_id=?";
+
+        try {
+            PreparedStatement preparedStatement = this.connection.prepareStatement(updateQuery);
+            preparedStatement.setInt(1,roomId);
+            int rowUpdate = preparedStatement.executeUpdate();
+            return rowUpdate>0;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+
 }
