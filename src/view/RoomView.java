@@ -157,6 +157,7 @@ public class RoomView extends JFrame {
         this.chck_gameConsole.setSelected(room.isGameConsole());
         this.chck_hotelSafe.setSelected(room.isHotelSafe());
         this.chck_projection.setSelected(room.isProjection());
+        this.fld_roomPrice.setText(String.valueOf(room.getRoomPrice()));
     }
 
     private Room addRoom() {
@@ -188,6 +189,7 @@ public class RoomView extends JFrame {
         room.setGameConsole(chck_gameConsole.isSelected());
         room.setHotelSafe(chck_hotelSafe.isSelected());
         room.setProjection(chck_projection.isSelected());
+        room.setRoomPrice(Double.parseDouble(fld_roomPrice.getText()));
 
         return room;
     }
