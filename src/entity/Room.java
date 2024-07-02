@@ -18,6 +18,7 @@ public class Room {
     private boolean projection;
     private double childPrice;
     private double adultPrice;
+    private double roomPrice;
 
     public enum RoomType {
         SINGLE_ROOM,
@@ -148,6 +149,14 @@ public class Room {
 
     public void setAdultPrice(double adultPrice) {
         this.adultPrice = adultPrice;
+    }
+
+    public double getRoomPrice() {
+        return roomPrice;
+    }
+
+    public void setRoomPrice(double roomPrice) {
+        this.roomPrice = roomPrice;
     }
 
 }
