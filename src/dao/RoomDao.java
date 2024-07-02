@@ -1,15 +1,9 @@
 package dao;
 
 import core.Database;
-import entity.Pension;
 import entity.Room;
-import entity.Season;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.LocalDate;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class RoomDao {
@@ -44,6 +38,7 @@ public class RoomDao {
                 room.setProjection(resultSet.getBoolean("projection"));
                 room.setChildPrice(resultSet.getDouble("child_price"));
                 room.setAdultPrice(resultSet.getDouble("adult_price"));
+                room.setRoomPrice(resultSet.getDouble("room_price"));
                 roomList.add(room);
             }
         } catch (SQLException e) {
@@ -54,9 +49,9 @@ public class RoomDao {
 
     public boolean addRoom(Room room) {
         String query = "INSERT INTO public.room (hotel_id,pension_id,season_id,room_type,room_stock,bed_num," +
-                "square_meters,tv,mini_bar,game_console,hotel_safe,projection,child_price,adult_price) "+
+                "square_meters,tv,mini_bar,game_console,hotel_safe,projection,child_price,adult_price,room_price) "+
                 "VALUES ( " +
-                "?,?,?,?,?,?,?,?,?,?,?,?,?,?" +
+                "?,?,?,?,?,?,?,?,?,?,?,?,?,?,?" +
                 " )";
         try {
             PreparedStatement preparedStatement = this.connection.prepareStatement(query);
@@ -74,6 +69,7 @@ public class RoomDao {
             preparedStatement.setBoolean(12,room.isProjection());
             preparedStatement.setDouble(13,room.getChildPrice());
             preparedStatement.setDouble(14,room.getAdultPrice());
+            preparedStatement.setDouble(15,room.getRoomPrice());
             return preparedStatement.executeUpdate() != -1;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -84,7 +80,7 @@ public class RoomDao {
     public boolean updateRoom(Room room) {
         String query = "UPDATE public.room " +
                 "SET hotel_id=?, pension_id=?, season_id=?, room_type=?,room_stock=?,bed_num=?," +
-                "square_meters=?,tv=?,mini_bar=?,game_console=?,hotel_safe=?,projection=?,child_price=?,adult_price=? " +
+                "square_meters=?,tv=?,mini_bar=?,game_console=?,hotel_safe=?,projection=?,child_price=?,adult_price=?,room_price=? " +
                 "WHERE room_id=?";
         try {
             PreparedStatement preparedStatement = this.connection.prepareStatement(query);
@@ -102,7 +98,8 @@ public class RoomDao {
             preparedStatement.setBoolean(12,room.isProjection());
             preparedStatement.setDouble(13,room.getChildPrice());
             preparedStatement.setDouble(14,room.getAdultPrice());
-            preparedStatement.setInt(15,room.getHotelId());
+            preparedStatement.setDouble(15,room.getRoomPrice());
+            preparedStatement.setInt(16,room.getHotelId());
             return preparedStatement.executeUpdate() != -1;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -148,11 +145,44 @@ public class RoomDao {
                 room.setProjection(resultSet.getBoolean("projection"));
                 room.setChildPrice(resultSet.getDouble("child_price"));
                 room.setAdultPrice(resultSet.getDouble("adult_price"));
+                room.setRoomPrice(resultSet.getDouble("room_price"));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         return room;
+    }
+
+    public ArrayList<Room> selectByQuery(String query) {
+        ArrayList<Room> roomList = new ArrayList<>();
+
+        try {
+            PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Room room = new Room();
+                room.setRoomId(resultSet.getInt("room_id"));
+                room.setHotelId(resultSet.getInt("hotel_id"));
+                room.setPensionId(resultSet.getInt("pension_id"));
+                room.setSeasonId(resultSet.getInt("season_id"));
+                room.setRoomType(Room.RoomType.valueOf(resultSet.getString("room_type")));
+                room.setRoomStock(resultSet.getInt("room_stock"));
+                room.setBedNum(resultSet.getInt("bed_num"));
+                room.setSquareMeters(resultSet.getDouble("square_meters"));
+                room.setTelevision(resultSet.getBoolean("tv"));
+                room.setMiniBar(resultSet.getBoolean("mini_bar"));
+                room.setGameConsole(resultSet.getBoolean("game_console"));
+                room.setHotelSafe(resultSet.getBoolean("hotel_safe"));
+                room.setProjection(resultSet.getBoolean("projection"));
+                room.setChildPrice(resultSet.getDouble("child_price"));
+                room.setAdultPrice(resultSet.getDouble("adult_price"));
+                room.setRoomPrice(resultSet.getDouble("room_price"));
+                roomList.add(room);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return roomList;
     }
 
 }

@@ -117,7 +117,7 @@ public class UserDao {
                     user.setId(resultSet.getInt("user_id"));
                     user.setUsername(resultSet.getString("user_username"));
                     user.setPassword(resultSet.getString("user_password"));
-                    user.setRole(User.Role.valueOf(resultSet.getString("user_role").toUpperCase()));
+                    user.setRole(User.Role.valueOf(resultSet.getString("user_role")));
                     userList.add(user);
                 }
             }
