@@ -27,6 +27,7 @@ public class AdminView extends JFrame {
     private final JPopupMenu userMenu = new JPopupMenu();
     private String[] columnNames;
 
+    //Evaluation Form-7
     public AdminView() {
         this.userManager = new UserManager();
         this.add(container);
@@ -36,6 +37,7 @@ public class AdminView extends JFrame {
         int y = (Toolkit.getDefaultToolkit().getScreenSize().height - this.getSize().height) / 2;
         this.setLocation(x,y);
         this.setVisible(true);
+
         loadUserRoleFilter();
         makeTable();
         loadUserComponent();
@@ -46,6 +48,7 @@ public class AdminView extends JFrame {
         });
     }
 
+    //Filtering by user role
     private void loadUserRoleFilter() {
         this.cmb_user_role.removeAllItems();
         for (Role role : Role.values()) {
@@ -54,6 +57,7 @@ public class AdminView extends JFrame {
         this.cmb_user_role.setSelectedItem(null);
     }
 
+    //Create Table
     private void makeTable() {
         columnNames = new String[]{"ID", "Username", "Password", "Role"};
         DefaultTableModel model = new DefaultTableModel();
@@ -75,6 +79,7 @@ public class AdminView extends JFrame {
         }
     }
 
+    //User(Admin) permissions
     private void loadUserComponent() {
         tableRowSelect(this.tbl_user, this.userMenu);
         this.userMenu.add("New").addActionListener(e -> {
@@ -129,6 +134,7 @@ public class AdminView extends JFrame {
         return Integer.parseInt(table.getValueAt(table.getSelectedRow(),index).toString());
     }
 
+    //Table and JPopMenu Settings
     public void tableRowSelect(JTable table, JPopupMenu menu) {
         table.addMouseListener(new MouseAdapter() {
             @Override

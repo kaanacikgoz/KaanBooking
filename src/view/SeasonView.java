@@ -27,6 +27,7 @@ public class SeasonView extends JFrame {
     private final HotelManager hotelManager;
     private final SeasonManager seasonManager;
 
+    //Evaluation Form-11
     public SeasonView(Season season) {
         this.hotelManager = new HotelManager();
         this.seasonManager = new SeasonManager();

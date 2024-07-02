@@ -22,6 +22,7 @@ public class PensionView extends JFrame {
     private final HotelManager hotelManager;
     private final PensionManager pensionManager;
 
+    //Evaluation Form-12
     public PensionView(Pension pension) {
         this.pension = pension;
         this.hotelManager = new HotelManager();

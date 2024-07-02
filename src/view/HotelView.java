@@ -47,11 +47,13 @@ public class HotelView extends JFrame {
         setupComboBox();
         setHotelInfo();
 
+        //Evaluation Form-10
         btn_add.addActionListener(e -> {
             if (this.hotel.getId() != 0) {
                 this.hotelManager.updateHotel(addHotel());
             } else {
                 this.hotelManager.addHotel(addHotel());
+                //Evaluation Form-24
                 JOptionPane.showMessageDialog(null, "Hotel added succesfully", "Success", JOptionPane.INFORMATION_MESSAGE);
             }
             dispose();

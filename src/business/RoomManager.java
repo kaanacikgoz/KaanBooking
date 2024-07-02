@@ -119,6 +119,8 @@ public class RoomManager {
         return busyRoomIds;
     }
 */
+
+    //Evaluation Form-15
     public ArrayList<Room> searchForRooms(String startDate, String finishDate, String city, String hotelName) {
 
         String query = "SELECT * FROM public.room as r LEFT JOIN public.hotel as h";

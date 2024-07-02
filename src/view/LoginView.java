@@ -28,8 +28,10 @@ public class LoginView extends JFrame {
         this.setLocation(x,y);
         this.setVisible(true);
 
+        //Evaluation Form-9
         btn_login.addActionListener(e -> {
             if (fld_username.getText().isEmpty() || fld_password.getText().isEmpty()) {
+                //Evaluation Form-25
                 JOptionPane.showMessageDialog(null, "Please fill in both fields", "Error", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 boolean userFound = false;
@@ -50,6 +52,7 @@ public class LoginView extends JFrame {
                     }
                 }
                 if (!userFound) {
+                    //Evaluation Form-25
                     JOptionPane.showMessageDialog(null, "User not found", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }

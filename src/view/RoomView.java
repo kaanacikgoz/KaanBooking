@@ -48,6 +48,7 @@ public class RoomView extends JFrame {
     private final SeasonManager seasonManager;
     private final RoomManager roomManager;
 
+    //Evaluation Form-13
     public RoomView(Room room) {
         this.room = room;
         this.hotelManager = new HotelManager();

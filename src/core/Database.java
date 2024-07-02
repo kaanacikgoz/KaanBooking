@@ -9,6 +9,8 @@ public class Database {
     private static Database instance;
     private Connection connection;
 
+    //Evaluation Form-6
+    //Database connection established
     public Database() {
         final String DATABASE_URL = "jdbc:postgresql://localhost:5432/kaanbooking";
         final String DATABASE_NAME = "postgres";

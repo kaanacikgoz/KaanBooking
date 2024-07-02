@@ -55,6 +55,7 @@ public class EmployeeView extends JFrame {
     private final JPopupMenu roomMenu = new JPopupMenu();
     private final JPopupMenu bookingMenu = new JPopupMenu();
 
+    //Evaluation Form-8
     public EmployeeView() {
         this.hotelManager = new HotelManager();
         this.pensionManager = new PensionManager();
@@ -89,7 +90,7 @@ public class EmployeeView extends JFrame {
             loadRoomFilter();
         });
 
-
+        //Evaluation Form-15
         btn_search.addActionListener(e -> {
             ComboItem selectedCity = (ComboItem) this.cmb_city.getSelectedItem();
             ComboItem selectedHotelName = (ComboItem) this.cmb_hotelName.getSelectedItem();
@@ -127,6 +128,7 @@ public class EmployeeView extends JFrame {
         this.cmb_hotelName.setSelectedItem(null);
     }
 
+    //Evaluation Form-16
     private void makeHotelTable() {
         hotelColumnNames = new String[]{"ID","Hotel Name","City","Region","Address","Email","Phone","Star",
                 "FreeParking","FreeWifi","SwimmingPool","Gym","Concierge","Spa","24/7 RoomService"};
@@ -190,6 +192,8 @@ public class EmployeeView extends JFrame {
         }
     }
 
+    //Evaluation Form-14
+    //Evaluation Form-16
     private void makeRoomTable() {
         roomColumnNames = new String[]{"ID","Hotel ID","Pension ID","Season ID","Room Type","Room Stock", "Bed Num",
                 "Square Meters","TV","MiniBar","Game Console","Hotel Safe","Projection","Child Price","Adult Price","Room Price"};
@@ -214,6 +218,8 @@ public class EmployeeView extends JFrame {
 
     }
 
+    //Evaluation Form-14
+    //Evaluation Form-20
     private void makeBookingTable() {
         bookingColumnNames = new String[]{"ID","Room ID","Customer Name","Customer TC","Customer Mail","Customer Phone",
                 "Start Date", "Finish Date", "Child Number", "Adult Number", "Total Price", "Customer Note"};
@@ -304,6 +310,7 @@ public class EmployeeView extends JFrame {
             if (response==JOptionPane.YES_OPTION) {
                 this.hotelManager.deleteHotel(selectHotelId);
                 loadHotelModelTable(null);
+                //Evaluation Form-24
                 JOptionPane.showMessageDialog(null, "Hotel delete successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(null, "Hotel could not deleted", "Not Deleted", JOptionPane.INFORMATION_MESSAGE);
@@ -372,6 +379,7 @@ public class EmployeeView extends JFrame {
             if (response==JOptionPane.YES_OPTION) {
                 this.seasonManager.deleteSeason(selectSeasonId);
                 loadSeasonModelTable(null);
+                //Evaluation Form-24
                 JOptionPane.showMessageDialog(null, "Season delete successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(null, "Season could not deleted", "Not Deleted", JOptionPane.INFORMATION_MESSAGE);
@@ -406,11 +414,13 @@ public class EmployeeView extends JFrame {
             if (response==JOptionPane.YES_OPTION) {
                 this.roomManager.deleteRoom(selectRoomId);
                 loadRoomModelTable(null);
+                //Evaluation Form-24
                 JOptionPane.showMessageDialog(null, "Room delete successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(null, "Room could not deleted", "Not Deleted", JOptionPane.INFORMATION_MESSAGE);
             }
         });
+        //Evaluation Form-18
         this.roomMenu.add("Create a Booking").addActionListener(e -> {
             BookingView bookingView = new BookingView(new Booking(),
                     fld_startDate.getText(),
@@ -426,6 +436,7 @@ public class EmployeeView extends JFrame {
 
     private void loadBookingComponent() {
         tableRowSelect(this.tbl_booking, this.bookingMenu);
+        //Evaluation Form-21
         this.bookingMenu.add("Update").addActionListener(e -> {
             int selectBookingId = this.getTableSelectedRow(this.tbl_booking, 0);
             BookingView bookingView = new BookingView(this.bookingManager.getByBookingId(selectBookingId),
@@ -438,12 +449,14 @@ public class EmployeeView extends JFrame {
                 }
             });
         });
+        //Evaluation Form-22
         this.bookingMenu.add("Delete").addActionListener(e -> {
             int response = JOptionPane.showConfirmDialog(null, "Are you sure to delete?", "Warning!",JOptionPane.YES_NO_OPTION);
             int selectBookingId = this.getTableSelectedRow(this.tbl_booking, 0);
             if (response==JOptionPane.YES_OPTION) {
                 this.bookingManager.deleteBooking(selectBookingId);
                 loadBookingModelTable(null);
+                //Evaluation Form-24
                 JOptionPane.showMessageDialog(null, "Booking delete successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(null, "Booking could not deleted", "Not Deleted", JOptionPane.INFORMATION_MESSAGE);
